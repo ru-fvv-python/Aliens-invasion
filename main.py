@@ -1,27 +1,29 @@
 import pygame
 
-# размеры окна
-WIDTH, HEIGHT = 1200, 800
-bg_color = (15, 15, 100)
-
-# число кадров в секунду
-clock = pygame.time.Clock()
-FPS = 60
+import game_functions as gf
+from settings import Settings
 
 
-sc = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption('Aliens invasion')
-pygame.display.set_icon(
-    pygame.image.load('images/icon_app.png').convert_alpha())
+def run():
+    pygame.init()
 
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            exit()
+    ai_set = Settings()
 
-    sc.fill(bg_color)
-    pygame.display.update()
-    clock.tick(FPS)
+    sc = pygame.display.set_mode((
+        ai_set.screen_width,
+        ai_set.screen_height))
+
+    pygame.display.set_caption('Aliens invasion')
+    pygame.display.set_icon(
+        pygame.image.load('images/icon_app.png').convert_alpha())
+
+    while True:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                exit()
+
+        # Обновляет изображения на экране и отображает новый экран.
+        gf.update_screen(ai_set, sc)
 
 
-
+run()
