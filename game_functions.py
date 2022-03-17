@@ -16,7 +16,7 @@ def check_events(ship):
                 ship.flLeftUp = True
 
 
-def update_screen(ai_settings, screen, ship):
+def update_screen(ai_settings, screen, ship, flame_r, flame_l):
     """Обновляет изображения на экране и отображает новый экран."""
     # рисуем фон экрана
     screen.fill(ai_settings.bg_color)
@@ -24,9 +24,14 @@ def update_screen(ai_settings, screen, ship):
     # рисуем корабль
     screen.blit(ship.image, ship.rect)
 
+    screen.blit(flame_r.image, flame_r.rect)
+    screen.blit(flame_l.image, flame_l.rect)
+
     # Отображение последнего прорисованного экрана с заданным FPS
     pygame.display.update()
     clock.tick(ai_settings.fps)
 
     # движение корабля
     ship.update()
+    flame_r.update()
+    flame_l.update()

@@ -4,9 +4,8 @@ import pygame
 class Ship():
     """реализует бульшую часть поведения корабля."""
 
-    def __init__(self, ai_settings, screen):
+    def __init__(self, ai_settings):
         """Инициализирует корабль и задает его начальную позицию."""
-        self.screen = screen
         self.ai_settings = ai_settings
         self.image_forward = pygame.image.load('images/forward.png') \
             .convert_alpha()
@@ -38,7 +37,7 @@ class Ship():
         # координаты корабля
         self.rect = self.image.get_rect(
             centerx=ai_settings.screen_width // 2,
-            bottom=ai_settings.screen_height - 5
+            bottom=ai_settings.screen_height - 85 / ai_settings.zoom
         )
         # сохранение вещественной координаты центра корабля
         self.center = float(self.rect.centerx)
@@ -80,8 +79,8 @@ class Ship():
         elif key[pygame.K_RIGHT]:
             self.move_right()
             self.center += self.speed_ship
-            if self.center > self.ai_settings.screen_width - self.rect.width:
-                self.center = self.ai_settings.screen_width - self.rect.width
+            if self.center > self.ai_settings.screen_width:
+                self.center = self.ai_settings.screen_width
         else:
             if self.flLeftUp:
                 self.move_from_left()
@@ -93,4 +92,4 @@ class Ship():
             self.image = self.image_forward
 
         # Обновление атрибута rect на основании self.center.
-        self.rect.x = self.center
+        self.rect.centerx = self.center

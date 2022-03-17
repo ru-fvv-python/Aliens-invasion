@@ -7,3 +7,7 @@ class Settings():
         self.screen_height = 800
         self.fps = 60
         self.bg_color = (15, 15, 100)
+
+        # параметры для пламени двигателя
+        self.offset = 17  # смещение относительно центра под двигатель
+        self.zoom = 1.7  # коэффициент уменьшения картинки
