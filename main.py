@@ -2,6 +2,7 @@ import pygame
 
 import game_functions as gf
 from settings import Settings
+from ship import Ship
 
 
 def run():
@@ -17,13 +18,14 @@ def run():
     pygame.display.set_icon(
         pygame.image.load('images/icon_app.png').convert_alpha())
 
+    ship = Ship(ai_set, sc)
+
     while True:
-        for event in pygame.event.get():
-            if event.type == pygame.QUIT:
-                exit()
+        # отслеживание нажатия клавиш
+        gf.check_events(ship)
 
         # Обновляет изображения на экране и отображает новый экран.
-        gf.update_screen(ai_set, sc)
+        gf.update_screen(ai_set, sc, ship)
 
 
 run()
