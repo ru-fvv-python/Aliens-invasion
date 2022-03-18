@@ -14,7 +14,7 @@ class Ship():
         file_right = 'right'
         self.left_images = []
         self.right_images = []
-        self.speed_ship = 10
+        self.speed_ship = ai_settings.speed
         self.flRightUp = False
         self.flLeftUp = False
 

@@ -1,9 +1,11 @@
 import pygame
 
 import game_functions as gf
+from pygame.sprite import Group
 from settings import Settings
 from ship import Ship
 from jet_flame import JetFlame
+
 
 def run():
     pygame.init()
@@ -24,12 +26,18 @@ def run():
     flame_r = JetFlame(ship, ai_set.offset, ai_set.zoom)
     flame_l = JetFlame(ship, -ai_set.offset, ai_set.zoom)
 
+    # Создание группы для хранения пуль.
+    bullets = Group()
+
     while True:
         # отслеживание нажатия клавиш
-        gf.check_events(ship)
+        gf.check_events(ship, bullets,  ai_set, sc)
+
+        # Обновляет позиции пуль и уничтожает старые пули.
+        gf.update_bullets(bullets)
 
         # Обновляет изображения на экране и отображает новый экран.
-        gf.update_screen(ai_set, sc, ship, flame_r, flame_l)
+        gf.update_screen(ai_set, sc, ship, flame_r, flame_l, bullets)
 
 
 run()
