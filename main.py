@@ -43,7 +43,7 @@ def run():
         gf.update_bullets(bullets)
 
         # Обновляет позицию пришельцев
-        gf.updates_aliens(aliens)
+        gf.updates_aliens(ai_set, aliens)
 
         # Обновляет изображения на экране и отображает новый экран.
         gf.update_screen(ai_set, sc, ship, flame_r, flame_l, bullets, aliens)
