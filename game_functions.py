@@ -1,5 +1,6 @@
 import pygame
 
+from alien import Alien
 from bullet import Bullet
 
 clock = pygame.time.Clock()
@@ -39,10 +40,73 @@ def update_bullets(bullets):
             bullets.remove(bullet)
 
 
-def update_screen(ai_settings, screen, ship, flame_r, flame_l, bullets):
+def get_number_aliens_x(ai_settings, alien_width):
+    """Вычисляет количество пришельцев в ряду."""
+    # свободное пространсво - три пришельца
+    available_space_x = ai_settings.screen_width - alien_width * 2
+    #  количество пришельцев с промежутком в два пришельца
+    number_aliens_x = int(available_space_x / (alien_width * 3))
+    return number_aliens_x
+
+
+def get_number_rows(ai_settings, ship_height, alien_height):
+    """Определяет количество рядов, помещающихся на экране."""
+    # доступное вертикальное пространство =
+    # вычитая высоту пришельца (сверху), высоту корабля (снизу)
+    # и высоту пришельца * 2 (снизу)
+    available_space_y = (ai_settings.screen_height - alien_height * 2 -
+                         ship_height)
+
+    # количество строк = свободное пространство / на высоту пришельца *2
+    number_rows = int(available_space_y / (alien_height * 2))
+    return number_rows
+
+
+def create_alien(ai_settings, screen, aliens, alien_number, row_number):
+    """Создает пришельца и размещает его в ряду."""
+    alien = Alien(ai_settings, screen)
+    alien_width = alien.rect.width
+
+    # расположение по горизонтали
+    # интервал между соседними пришельцами равен 3 ширине пришельца
+    alien.x = 3 * alien_width * alien_number
+    alien.rect.x = alien.x
+
+    # по вертикали
+    # интервал между соседними пришельцами равен 2 высоте пришельца
+    alien.rect.y = 2 * alien.rect.height * row_number
+    aliens.add(alien)
+
+
+def create_fleet(ai_settings, screen, ship, aliens):
+    """Создает флот пришельцев."""
+    # Создание пришельца и вычисление количества пришельцев в ряду.
+    alien = Alien(ai_settings, screen)
+    number_aliens_x = get_number_aliens_x(ai_settings, alien.rect.width)
+    number_rows = get_number_rows(ai_settings, ship.rect.height,
+                                  alien.rect.height)
+
+    # Создание флота пришельцев
+    for row_number in range(number_rows):
+        for alien_number in range(number_aliens_x):
+            create_alien(ai_settings, screen, aliens, alien_number, row_number)
+
+
+def updates_aliens(aliens):
+    """ Обновляет позиции всех пришельцев во флоте."""
+    # вызывает alien.update() для каждого чужого из группы aliens
+    aliens.update()
+
+
+def update_screen(ai_settings, screen, ship, flame_r, flame_l, bullets,
+                  aliens):
     """Обновляет изображения на экране и отображает новый экран."""
     # рисуем фон экрана
     screen.fill(ai_settings.bg_color)
+
+    # Все пули выводятся позади изображений корабля и пришельцев.
+    for bullet in bullets.sprites():
+        bullet.draw_bullet()
 
     # рисуем корабль
     screen.blit(ship.image, ship.rect)
@@ -51,9 +115,8 @@ def update_screen(ai_settings, screen, ship, flame_r, flame_l, bullets):
     screen.blit(flame_r.image, flame_r.rect)
     screen.blit(flame_l.image, flame_l.rect)
 
-    # Все пули выводятся позади изображений корабля и пришельцев.
-    for bullet in bullets.sprites():
-        bullet.draw_bullet()
+    # вывод пришельцев
+    aliens.draw(screen)
 
     # Отображение последнего прорисованного экрана с заданным FPS
     pygame.display.update()

@@ -2,8 +2,6 @@ from random import randint
 
 import pygame
 
-clock = pygame.time.Clock()
-
 
 class JetFlame():
     """Реализует огонь реактивного двигателя корабля"""
@@ -12,6 +10,7 @@ class JetFlame():
         self.ship_rect = ship.rect
         # список картинок анимации огня
         self.images = []
+
         # смещение координаты огня под двигатель
         # относительно центра корабля
         self.offset = offset

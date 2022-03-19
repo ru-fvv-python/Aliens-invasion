@@ -29,6 +29,12 @@ def run():
     # Создание группы для хранения пуль.
     bullets = Group()
 
+    # Создание группы пришельцев
+    aliens = Group()
+
+    # Создание флота пришельцев.
+    gf.create_fleet(ai_set, sc, ship, aliens)
+
     while True:
         # отслеживание нажатия клавиш
         gf.check_events(ship, bullets,  ai_set, sc)
@@ -36,8 +42,11 @@ def run():
         # Обновляет позиции пуль и уничтожает старые пули.
         gf.update_bullets(bullets)
 
+        # Обновляет позицию пришельцев
+        gf.updates_aliens(aliens)
+
         # Обновляет изображения на экране и отображает новый экран.
-        gf.update_screen(ai_set, sc, ship, flame_r, flame_l, bullets)
+        gf.update_screen(ai_set, sc, ship, flame_r, flame_l, bullets, aliens)
 
 
 run()
