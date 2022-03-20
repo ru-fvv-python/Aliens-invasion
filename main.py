@@ -5,6 +5,7 @@ import game_functions as gf
 from jet_flame import JetFlame
 from settings import Settings
 from ship import Ship
+from explosion import Explosion
 
 
 def run():
@@ -30,9 +31,14 @@ def run():
     stars = Group()
     # Создание группы для хранения пуль.
     bullets = Group()
+
+    # взрыв
+    explosion = Explosion(sc)
+
     # Создание группы пришельцев
     aliens = Group()
 
+    # создание звездного неба
     gf.create_star_sky(ai_set, stars)
 
     # Создание флота пришельцев.
@@ -42,17 +48,18 @@ def run():
         # отслеживание нажатия клавиш
         gf.check_events(ship, bullets, ai_set, sc)
 
+        # обновление неба
         gf.update_stars(stars)
 
         # Обновляет позиции пуль и уничтожает старые пули.
-        gf.update_bullets(aliens, bullets)
+        gf.update_bullets(aliens, bullets, explosion)
 
         # Обновляет позицию пришельцев
         gf.updates_aliens(ai_set, aliens)
 
         # Обновляет изображения на экране и отображает новый экран.
         gf.update_screen(ai_set, sc, ship, flame_r, flame_l, bullets, aliens,
-                         stars)
+                         stars, explosion)
 
 
 run()

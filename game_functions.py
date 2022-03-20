@@ -4,6 +4,7 @@ from alien import Alien
 from bullet import Bullet
 from star import Star
 from random import randint
+from explosion import Explosion
 
 
 clock = pygame.time.Clock()
@@ -33,9 +34,6 @@ def fire_bullet(ai_settings, screen, ship, bullets):
     if len(bullets) < ai_settings.bullets_allowed:
         new_bullet = Bullet(ai_settings, screen, ship)
         bullets.add(new_bullet)
-
-
-
 
 
 def get_number_aliens_x(ai_settings, alien_width):
@@ -175,7 +173,7 @@ def update_stars(stars):
     stars.update()
 
 
-def update_bullets(aliens, bullets):
+def update_bullets(aliens, bullets, explosion):
     """Обновляет позиции пуль и уничтожает старые пули."""
     # вызывает bullet.update() для каждой пули, включенной в группу bullets
     bullets.update()
@@ -187,10 +185,14 @@ def update_bullets(aliens, bullets):
     # проверка попаданий в UFO
     # При обнаружении попадания удалить пулю и пришельца.
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
+    if collisions:
+        for alien in collisions.values():
+            # передача сбитых кораблей для взятия их координат
+            explosion.get_alien(alien)
 
 
 def update_screen(ai_settings, screen, ship, flame_r, flame_l, bullets,
-                  aliens, stars):
+                  aliens, stars, explosion):
     """Обновляет изображения на экране и отображает новый экран."""
     # рисуем фон экрана
     screen.fill(ai_settings.bg_color)
@@ -204,6 +206,9 @@ def update_screen(ai_settings, screen, ship, flame_r, flame_l, bullets,
 
     # рисуем корабль
     screen.blit(ship.image, ship.rect)
+
+    # анимация взрыва
+    explosion.update()
 
     # рисуем огни двигателя
     screen.blit(flame_r.image, flame_r.rect)
