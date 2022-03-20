@@ -6,14 +6,14 @@ import pygame
 class JetFlame():
     """Реализует огонь реактивного двигателя корабля"""
 
-    def __init__(self, ship, offset, zoom):
+    def __init__(self, ship, offset_jet, zoom):
         self.ship_rect = ship.rect
         # список картинок анимации огня
         self.images = []
 
         # смещение координаты огня под двигатель
         # относительно центра корабля
-        self.offset = offset
+        self.offset_jet = offset_jet
         # коэффициент уменьшения картинки
         self.zoom = zoom
         file_name = 'jet_flame'
@@ -41,5 +41,5 @@ class JetFlame():
             анимация за счет выбора случайной картинки из списка
         """
         self.rect.top = self.ship_rect.bottom
-        self.rect.centerx = self.ship_rect.centerx + self.offset
+        self.rect.centerx = self.ship_rect.centerx + self.offset_jet
         self.image = self.images[randint(0, 3)]

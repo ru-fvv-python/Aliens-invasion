@@ -2,6 +2,9 @@ import pygame
 
 from alien import Alien
 from bullet import Bullet
+from star import Star
+from random import randint
+
 
 clock = pygame.time.Clock()
 
@@ -20,6 +23,8 @@ def check_events(ship, bullets, ai_settings, screen):
             if event.key == pygame.K_SPACE:
                 # стрельба из пушки
                 fire_bullet(ai_settings, screen, ship, bullets)
+            elif event.key == pygame.K_q:
+                exit()
 
 
 def fire_bullet(ai_settings, screen, ship, bullets):
@@ -107,6 +112,59 @@ def change_fleet_direction(ai_settings, aliens):
     ai_settings.fleet_direction *= -1
 
 
+# ----------------------------- Звезды ---------------------------------------
+
+
+def get_number_stars_x(ai_settings):
+    """Вычисляет количество звезд в ряду."""
+    # коэффициент расстояния между звезд
+    space = ai_settings.space_between_stars
+    # ширина звезды
+    star_width = ai_settings.star_width
+    #  количество звезд с промежутком в 'space * star_width'
+    total_column_stars = int(ai_settings.screen_width / (star_width * space))
+    return total_column_stars
+
+
+def get_number_stars_y(ai_settings):
+    """Определяет количество рядов звезд, помещающихся на экране."""
+    # коэффициент расстояния между звезд
+    space = ai_settings.space_between_stars
+    # высота звезды
+    star_height = ai_settings.star_height
+    #  количество звезд с промежутком в 'space * star_heigh'
+    total_row_stars = int(ai_settings.screen_height / (star_height * space))
+    return total_row_stars
+
+
+def create_star(ai_settings, stars, column, row):
+    """ создание и добавление звезды в группу stars"""
+    # создание звезды
+    star = Star(ai_settings)
+    # площадь под звезду
+    star_width = ai_settings.star_width
+    star_height = ai_settings.star_height
+    # интервал между соседними звездами
+    space = ai_settings.space_between_stars
+    # смещение по осям +-
+    offset = ai_settings.offset
+    # координата по оси Х
+    star.rect.x = space * star_width * column + randint(-offset, offset)
+    # координата по оси Y
+    star.rect.y = space * star_height * row + randint(-offset, offset)
+    stars.add(star)
+
+
+def create_star_sky(ai_settings, stars):
+    """Создает звезд на небе"""
+    total_column_stars = get_number_stars_x(ai_settings)
+    total_row_stars = get_number_stars_y(ai_settings)
+
+    for row in range(total_row_stars):
+        for column in range(total_column_stars):
+            create_star(ai_settings, stars, column, row)
+
+
 def updates_aliens(ai_settings, aliens):
     """
     Проверяет, достиг ли флот края экрана,
@@ -117,11 +175,18 @@ def updates_aliens(ai_settings, aliens):
     aliens.update()
 
 
+def update_stars(stars):
+    stars.update()
+
+
 def update_screen(ai_settings, screen, ship, flame_r, flame_l, bullets,
-                  aliens):
+                  aliens, stars):
     """Обновляет изображения на экране и отображает новый экран."""
     # рисуем фон экрана
     screen.fill(ai_settings.bg_color)
+
+    # рисуем звезды
+    stars.draw(screen)
 
     # Все пули выводятся позади изображений корабля и пришельцев.
     for bullet in bullets.sprites():

@@ -1,10 +1,10 @@
 import pygame
+from pygame.sprite import Group
 
 import game_functions as gf
-from pygame.sprite import Group
+from jet_flame import JetFlame
 from settings import Settings
 from ship import Ship
-from jet_flame import JetFlame
 
 
 def run():
@@ -14,7 +14,7 @@ def run():
 
     sc = pygame.display.set_mode((
         ai_set.screen_width,
-        ai_set.screen_height))
+        ai_set.screen_height), pygame.FULLSCREEN)
 
     pygame.display.set_caption('Aliens invasion')
     pygame.display.set_icon(
@@ -23,21 +23,26 @@ def run():
     # корабль
     ship = Ship(ai_set)
     # огони двигателя: правый и левый
-    flame_r = JetFlame(ship, ai_set.offset, ai_set.zoom)
-    flame_l = JetFlame(ship, -ai_set.offset, ai_set.zoom)
+    flame_r = JetFlame(ship, ai_set.offset_jet, ai_set.zoom)
+    flame_l = JetFlame(ship, -ai_set.offset_jet, ai_set.zoom)
 
+    # создание группы звезд
+    stars = Group()
     # Создание группы для хранения пуль.
     bullets = Group()
-
     # Создание группы пришельцев
     aliens = Group()
+
+    gf.create_star_sky(ai_set, stars)
 
     # Создание флота пришельцев.
     gf.create_fleet(ai_set, sc, ship, aliens)
 
     while True:
         # отслеживание нажатия клавиш
-        gf.check_events(ship, bullets,  ai_set, sc)
+        gf.check_events(ship, bullets, ai_set, sc)
+
+        gf.update_stars(stars)
 
         # Обновляет позиции пуль и уничтожает старые пули.
         gf.update_bullets(bullets)
@@ -46,7 +51,8 @@ def run():
         gf.updates_aliens(ai_set, aliens)
 
         # Обновляет изображения на экране и отображает новый экран.
-        gf.update_screen(ai_set, sc, ship, flame_r, flame_l, bullets, aliens)
+        gf.update_screen(ai_set, sc, ship, flame_r, flame_l, bullets, aliens,
+                         stars)
 
 
 run()
