@@ -16,14 +16,14 @@ class Settings():
         self.zoom = 2  # коэффициент уменьшения картинки.
 
         # параметры пули -------------------------------------------
-        self.bullet_speed_factor = 10
+        self.bullet_speed_factor = 15
         self.bullet_with = 3
         self.bullet_height = 15
         self.bullet_color = (219, 138, 17)
         self.bullets_allowed = 4
 
         # настройки пришельцев -----------------------------------------
-        self.alien_speed_factor = 1
+        self.alien_speed_factor = 3
         self.alien_drop_speed = 10
         # fleet_direction = 1 обозначает движение вправо; а -1 - влево.
         self.fleet_direction = -1

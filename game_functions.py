@@ -35,14 +35,7 @@ def fire_bullet(ai_settings, screen, ship, bullets):
         bullets.add(new_bullet)
 
 
-def update_bullets(bullets):
-    """Обновляет позиции пуль и уничтожает старые пули."""
-    # вызывает bullet.update() для каждой пули, включенной в группу bullets
-    bullets.update()
-    # Удаление пуль, вышедших за край экрана.
-    for bullet in bullets:
-        if bullet.rect.bottom <= 0:
-            bullets.remove(bullet)
+
 
 
 def get_number_aliens_x(ai_settings, alien_width):
@@ -164,6 +157,8 @@ def create_star_sky(ai_settings, stars):
         for column in range(total_column_stars):
             create_star(ai_settings, stars, column, row)
 
+# ----------------------------- updates --------------------------------------
+
 
 def updates_aliens(ai_settings, aliens):
     """
@@ -176,7 +171,22 @@ def updates_aliens(ai_settings, aliens):
 
 
 def update_stars(stars):
+    """обновляет позицию звезд"""
     stars.update()
+
+
+def update_bullets(aliens, bullets):
+    """Обновляет позиции пуль и уничтожает старые пули."""
+    # вызывает bullet.update() для каждой пули, включенной в группу bullets
+    bullets.update()
+    # Удаление пуль, вышедших за край экрана.
+    for bullet in bullets:
+        if bullet.rect.bottom <= 0:
+            bullets.remove(bullet)
+
+    # проверка попаданий в UFO
+    # При обнаружении попадания удалить пулю и пришельца.
+    collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
 
 
 def update_screen(ai_settings, screen, ship, flame_r, flame_l, bullets,
