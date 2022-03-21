@@ -6,17 +6,17 @@ class Settings():
         self.screen_width = 1920
         self.screen_height = 1080
         self.fps = 60
-        self.bg_color = (2, 15, 62)
+        self.bg_color = (5, 5, 25)
 
         # параметры карабля ----------------------------------------
-        self.speed = 10
+        self.speed = 15
 
         # параметры для пламени двигателя игрока -------------------
         self.offset_jet = 17  # смещение относительно центра под двигатель
         self.zoom = 2  # коэффициент уменьшения картинки.
 
         # параметры пули -------------------------------------------
-        self.bullet_speed_factor = 15
+        self.bullet_speed_factor = 20
         self.bullet_with = 3
         self.bullet_height = 15
         self.bullet_color = (219, 138, 17)

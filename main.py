@@ -52,7 +52,7 @@ def run():
         gf.update_stars(stars)
 
         # Обновляет позиции пуль и уничтожает старые пули.
-        gf.update_bullets(aliens, bullets, explosion)
+        gf.update_bullets(ai_set, sc, ship, aliens, bullets, explosion)
 
         # Обновляет позицию пришельцев
         gf.updates_aliens(ai_set, aliens)

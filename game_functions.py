@@ -1,11 +1,10 @@
+from random import randint
+
 import pygame
 
 from alien import Alien
 from bullet import Bullet
 from star import Star
-from random import randint
-from explosion import Explosion
-
 
 clock = pygame.time.Clock()
 
@@ -155,6 +154,7 @@ def create_star_sky(ai_settings, stars):
         for column in range(total_column_stars):
             create_star(ai_settings, stars, column, row)
 
+
 # ----------------------------- updates --------------------------------------
 
 
@@ -173,7 +173,7 @@ def update_stars(stars):
     stars.update()
 
 
-def update_bullets(aliens, bullets, explosion):
+def update_bullets(ai_settings, screen, ship, aliens, bullets, explosion):
     """Обновляет позиции пуль и уничтожает старые пули."""
     # вызывает bullet.update() для каждой пули, включенной в группу bullets
     bullets.update()
@@ -189,6 +189,11 @@ def update_bullets(aliens, bullets, explosion):
         for alien in collisions.values():
             # передача сбитых кораблей для взятия их координат
             explosion.get_alien(alien)
+
+    if len(aliens) == 0:
+        # Уничтожение существующих пуль и создание нового флота.
+        bullets.empty()
+        create_fleet(ai_settings, screen, ship, aliens)
 
 
 def update_screen(ai_settings, screen, ship, flame_r, flame_l, bullets,
