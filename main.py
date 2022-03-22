@@ -59,7 +59,7 @@ def run():
         gf.update_bullets(ai_set, sc, ship, aliens, bullets, explosions)
 
         # Обновляет позицию пришельцев
-        gf.updates_aliens(ai_set, stats, sc, ship, aliens, bullets)
+        gf.update_aliens(ai_set, stats, sc, ship, aliens, bullets)
 
         # обновляет взрывы
         gf.update_explosions(explosions)
