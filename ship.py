@@ -4,9 +4,11 @@ import pygame
 class Ship():
     """реализует бульшую часть поведения корабля."""
 
-    def __init__(self, ai_settings):
+    def __init__(self, ai_settings, screen):
         """Инициализирует корабль и задает его начальную позицию."""
         self.ai_settings = ai_settings
+        self.screen = screen
+        self.screen_rect = screen.get_rect()
         self.image_forward = pygame.image.load('images/forward.png') \
             .convert_alpha()
         self.image = self.image_forward
@@ -42,6 +44,9 @@ class Ship():
         # сохранение вещественной координаты центра корабля
         self.center = float(self.rect.centerx)
 
+    def center_ship(self):
+        """Размещает корабль в центре нижней стороны."""
+        self.center = self.screen_rect.centerx
 
     def move_left(self):
         """разворот корабля налево"""

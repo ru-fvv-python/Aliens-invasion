@@ -4,12 +4,12 @@ import pygame
 class Explosion():
     """ класс для создания взрыва"""
 
-    def __init__(self, screen):
+    def __init__(self, file_sprites, columns, rows, screen):
         """описывает взрыв"""
 
         self.screen = screen
         # имя файла со спрайтами
-        file_sprites = 'explosion'
+        self.file_sprites = 'explosion'
         # читаем файл
         image_sprites = pygame.image.load(
             'images/{}.png'.format(file_sprites)
@@ -20,8 +20,8 @@ class Explosion():
         height_sprites = image_sprites.get_height()
 
         # сколько колонок и строк в таблице стпрайтов
-        columns = 5
-        rows = 6
+        self.columns = columns
+        self.rows = rows
 
         # определяем ширину ивысоту одного спрайта
         width_sprite = width_sprites / columns

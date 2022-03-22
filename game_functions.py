@@ -1,4 +1,5 @@
 from random import randint
+from time import sleep
 
 import pygame
 
@@ -157,8 +158,25 @@ def create_star_sky(ai_settings, stars):
 
 # ----------------------------- updates --------------------------------------
 
+def ship_hit(ai_settings, stats, screen, ship, aliens, bullets):
+    """Обрабатывает столкновение корабля с пришельцем."""
+    # Уменьшение ships_left.
+    stats.ship_left -= 1
 
-def updates_aliens(ai_settings, aliens):
+    # Очистка списков пришельцев и пуль.
+    aliens.empty()
+    bullets.empty()
+
+    # Создание нового флота и размещение корабля в центре.
+    create_fleet(ai_settings, screen, ship, aliens)
+    ai_settings.fleet_direction = -1
+    ship.center_ship()
+
+    # Пауза.
+    sleep(0.5)
+
+
+def updates_aliens(ai_settings, stats, screen, ship, aliens, bullets):
     """
     Проверяет, достиг ли флот края экрана,
     после чего обновляет позиции всех пришельцев во флоте.
@@ -166,6 +184,10 @@ def updates_aliens(ai_settings, aliens):
     # вызывает alien.update() для каждого чужого из группы aliens
     check_fleet_edges(ai_settings, aliens)
     aliens.update()
+    # Проверка коллизий "пришелец-корабль".
+    if pygame.sprite.spritecollideany(ship, aliens):
+        # Обрабатывает столкновение корабля с пришельцем
+        ship_hit(ai_settings, stats, screen, ship, aliens, bullets)
 
 
 def update_stars(stars):
@@ -200,6 +222,7 @@ def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets,
         # Уничтожение существующих пуль и создание нового флота.
         bullets.empty()
         create_fleet(ai_settings, screen, ship, aliens)
+        ai_settings.fleet_direction = -1  #
 
 
 def update_screen(ai_settings, screen, ship, flame_r, flame_l, bullets,
