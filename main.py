@@ -36,9 +36,8 @@ def run():
     # Создание группы для хранения пуль.
     bullets = Group()
 
-    # взрыв
-    # explosion = Explosion('explosion', 5, 6, sc)
-    explosion = Explosion('sprite-explosion', 8, 6, sc)
+    # создание группы для взрывов
+    explosions = Group()
 
     # Создание группы пришельцев
     aliens = Group()
@@ -57,14 +56,17 @@ def run():
         gf.update_stars(stars)
 
         # Обновляет позиции пуль и уничтожает старые пули.
-        gf.update_bullets(ai_set, sc, ship, aliens, bullets, explosion)
+        gf.update_bullets(ai_set, sc, ship, aliens, bullets, explosions)
 
         # Обновляет позицию пришельцев
         gf.updates_aliens(ai_set, stats, sc, ship, aliens, bullets)
 
+        # обновляет взрывы
+        gf.update_explosions(explosions)
+
         # Обновляет изображения на экране и отображает новый экран.
         gf.update_screen(ai_set, sc, ship, flame_r, flame_l, bullets, aliens,
-                         stars, explosion)
+                         stars, explosions)
 
 
 run()

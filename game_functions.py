@@ -6,6 +6,7 @@ import pygame
 from alien import Alien
 from bullet import Bullet
 from star import Star
+from explosion import Explosion
 
 clock = pygame.time.Clock()
 
@@ -195,7 +196,7 @@ def update_stars(stars):
     stars.update()
 
 
-def update_bullets(ai_settings, screen, ship, aliens, bullets, explosion):
+def update_bullets(ai_settings, screen, ship, aliens, bullets, explosions):
     """Обновляет позиции пуль и уничтожает старые пули."""
     # вызывает bullet.update() для каждой пули, включенной в группу bullets
     bullets.update()
@@ -205,24 +206,31 @@ def update_bullets(ai_settings, screen, ship, aliens, bullets, explosion):
             bullets.remove(bullet)
     # Обработка коллизий пуль с пришельцами.
     check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets,
-                                  explosion)
+                                  explosions)
 
 
 def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets,
-                                  explosion):
+                                  explosions):
     """Обработка коллизий пуль с пришельцами."""
     # При обнаружении попадания удалить пулю и пришельца.
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
     if collisions:
-        for alien in collisions.values():
-            # передача сбитых кораблей для взятия их координат
-            explosion.get_alien(alien)
+        for downed_aliens in collisions.values():
+            # создание взрыва
+            new_explosion = Explosion('sprite-explosion', 8, 6, screen,
+                                      downed_aliens)
+            explosions.add(new_explosion)
 
     if len(aliens) == 0:
         # Уничтожение существующих пуль и создание нового флота.
         bullets.empty()
         create_fleet(ai_settings, screen, ship, aliens)
         ai_settings.fleet_direction = -1  #
+
+
+def update_explosions(explosions):
+    """обновляет взрывы"""
+    explosions.update()
 
 
 def update_screen(ai_settings, screen, ship, flame_r, flame_l, bullets,
@@ -259,3 +267,5 @@ def update_screen(ai_settings, screen, ship, flame_r, flame_l, bullets,
     ship.update()
     flame_r.update()
     flame_l.update()
+
+

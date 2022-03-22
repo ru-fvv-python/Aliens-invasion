@@ -1,25 +1,32 @@
 import pygame
+from pygame.sprite import Sprite
 
 
-class Explosion():
+class Explosion(Sprite):
     """ класс для создания взрыва"""
 
-    def __init__(self, file_sprites, columns, rows, screen):
-        """описывает взрыв"""
-
+    def __init__(self, file_sprites, columns, rows, screen, downed_aliens):
+        """описывает взрыв
+            file_sprites - файл со спрайтами,
+            columns - число колонок со спрайтами,
+            rows - число строк со спрайтами,
+            screen - экран,
+            downed_aliens - список сбитых чужих
+        """
+        super().__init__()
         self.screen = screen
-        # имя файла со спрайтами
-        self.file_sprites = 'explosion'
-        # читаем файл
+        self.downed_aliens = downed_aliens
+
+        # читаем файл со спрайтами
         image_sprites = pygame.image.load(
             'images/{}.png'.format(file_sprites)
         ).convert_alpha()
 
-        # ширина и высота картины
+        # ширина и высота картины со спрайтами
         width_sprites = image_sprites.get_width()
         height_sprites = image_sprites.get_height()
 
-        # сколько колонок и строк в таблице стпрайтов
+        # сколько колонок и строк в таблице со спрайтами
         self.columns = columns
         self.rows = rows
 
@@ -43,7 +50,6 @@ class Explosion():
                             width_sprite,
                             height_sprite
                         )
-
                     )
                 )
             # смещаемся на высоту кадра, т.е. переходим на другую строку
@@ -52,16 +58,13 @@ class Explosion():
         self.image = self.sprites[0]
         self.rect = self.image.get_rect()
 
-        # флаг взрыва
-        self.flExp = False
         # номер спрайта (для отрисовки взрыва)
         self.number_sprite = 0
 
-    def get_alien(self, aliens):
-        """ берем координаты сбитого пришельца и меняет флаг взрыва"""
-        for alien in aliens:
-            # заводим координаты пришельца на квадрат для взрыва
-            self.rect.center = alien.rect.center
+        # берем координаты сбитого пришельца и меняет флаг взрыва
+        for downed_alien in self.downed_aliens:
+            # присваиваем координаты сбитого корабля поверхности для взрыва
+            self.rect.center = downed_alien.rect.center
             #  активируем флаг взрыва
             self.flExp = True
 
@@ -81,3 +84,4 @@ class Explosion():
                 # иначе сброс счетчика и отключение флага
                 self.number_sprite = 0
                 self.flExp = False
+                self.kill()
