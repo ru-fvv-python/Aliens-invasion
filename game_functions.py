@@ -5,13 +5,13 @@ import pygame
 
 from alien import Alien
 from bullet import Bullet
-from star import Star
 from explosion import Explosion
+from star import Star
 
 clock = pygame.time.Clock()
 
 
-def check_events(ship, bullets, ai_settings, screen):
+def check_events(ship, bullets, ai_settings, screen, stats, play_button):
     """Обрабатывает нажатия клавиш"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -27,6 +27,15 @@ def check_events(ship, bullets, ai_settings, screen):
                 fire_bullet(ai_settings, screen, ship, bullets)
             elif event.key == pygame.K_q:
                 exit()
+        elif event.type == pygame.MOUSEBUTTONDOWN:
+            mouse_x, mouse_y = pygame.mouse.get_pos()
+            check_play_button(stats, play_button, mouse_x, mouse_y)
+
+
+def check_play_button(stats, play_button, mouse_x, mouse_y):
+    """Запускает новую игру при нажатии кнопки Play"""
+    if play_button.rect.collidepoint(mouse_x, mouse_y):
+        stats.game_active = True
 
 
 def fire_bullet(ai_settings, screen, ship, bullets):
@@ -254,8 +263,8 @@ def update_explosions(explosions):
     explosions.update()
 
 
-def update_screen(ai_settings, screen, ship, flame_r, flame_l, bullets,
-                  aliens, stars, explosion):
+def update_screen(ai_settings, screen, stats, ship, flame_r, flame_l, bullets,
+                  aliens, stars, explosion, play_button):
     """Обновляет изображения на экране и отображает новый экран."""
     # рисуем фон экрана
     screen.fill(ai_settings.bg_color)
@@ -280,6 +289,10 @@ def update_screen(ai_settings, screen, ship, flame_r, flame_l, bullets,
     # вывод пришельцев
     aliens.draw(screen)
 
+    # Кнопка Play отображается в том случае, если игра не активна
+    if not stats.game_active:
+        play_button.draw_button()
+
     # Отображение последнего прорисованного экрана с заданным FPS
     pygame.display.update()
     clock.tick(ai_settings.fps)
@@ -288,5 +301,3 @@ def update_screen(ai_settings, screen, ship, flame_r, flame_l, bullets,
     ship.update()
     flame_r.update()
     flame_l.update()
-
-

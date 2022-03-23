@@ -1,4 +1,4 @@
-class GAmeStats():
+class GameStats():
     """Отслеживание статистики для игры Alien Invasion"""
 
     def __init__(self, ai_settings):
@@ -6,8 +6,8 @@ class GAmeStats():
         self.ai_settings = ai_settings
         self.ship_left = 0
 
-        # Игра Alien Invasion запускается в активном состоянии.
-        self.game_active = True
+        # Игра Alien Invasion запускается в неактивном состоянии.
+        self.game_active = False
 
         self.reset_stats()
 
