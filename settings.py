@@ -9,7 +9,7 @@ class Settings():
         self.bg_color = (5, 5, 25)
 
         # параметры карабля ----------------------------------------
-        self.speed = 5
+        self.speed = 8
         self.ship_limit = 3  # ограничение количества кораблей
 
         # параметры для пламени двигателя игрока -------------------
@@ -24,8 +24,8 @@ class Settings():
         self.bullets_allowed = 3
 
         # настройки пришельцев -----------------------------------------
-        self.alien_speed_factor = 2
-        self.alien_drop_speed = 100
+        self.alien_speed_factor = 3
+        self.alien_drop_speed = 20
         # fleet_direction = 1 обозначает движение вправо; а -1 - влево.
         self.fleet_direction = -1
 
@@ -33,7 +33,7 @@ class Settings():
         self.star_speed = 1  # коэффициент скорости звезд
         self.space_between_stars = 1  # коэффициент расстояния между звезд
         self.star_width = 150  # ширина звезды
-        self.star_height = 300  # высота звезды
+        self.star_height = 400  # высота звезды
         self.offset = 100  # смещение по осям +-
 
 

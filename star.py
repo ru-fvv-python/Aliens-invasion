@@ -28,7 +28,7 @@ class Star(Sprite):
         sf = images[randint(0, 4)]
 
         # уменьшение картики нв случайную величину от 1 до 5
-        zoom = randint(3, 5)
+        zoom = randint(4, 4)
 
         # готовая картинка
         self.image = pygame.transform.scale(sf,
