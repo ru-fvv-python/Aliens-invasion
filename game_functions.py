@@ -26,6 +26,9 @@ def check_events(ship, aliens, bullets, ai_settings, screen, stats,
             if event.key == pygame.K_SPACE:
                 # стрельба из пушки
                 fire_bullet(ai_settings, screen, ship, bullets)
+            elif event.key == pygame.K_p and not stats.game_active:
+                # запускает игру
+                start_game(ai_settings, screen, stats, ship, aliens, bullets)
             elif event.key == pygame.K_q:
                 exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
@@ -34,26 +37,32 @@ def check_events(ship, aliens, bullets, ai_settings, screen, stats,
                               aliens, bullets, mouse_x, mouse_y)
 
 
+def start_game(ai_settings, screen, stats, ship, aliens, bullets):
+    """запускает игру"""
+    # указатель мыши скрывается
+    pygame.mouse.set_visible(False)
+
+    # Сброс игровой статистики
+    stats.reset_stats()
+    stats.game_active = True
+
+    #         очистка списков пришельцев и пуль.
+    aliens.empty()
+    bullets.empty()
+
+    #         создание нового флота и размещение кораблей
+    create_fleet(ai_settings, screen, ship, aliens)
+    ship.center_ship()
+
+
 def check_play_button(ai_settings, screen, stats, play_button, ship, aliens,
                       bullets,
                       mouse_x, mouse_y):
     """Запускает новую игру при нажатии кнопки Play"""
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
     if button_clicked and not stats.game_active:
-        # указатель мыши скрывается
-        pygame.mouse.set_visible(False)
-
-        # Сброс игровой статистики
-        stats.reset_stats()
-        stats.game_active = True
-
-        #         очистка списков пришельцев и пуль.
-        aliens.empty()
-        bullets.empty()
-
-        #         создание нового флота и размещение кораблей
-        create_fleet(ai_settings, screen, ship, aliens)
-        ship.center_ship()
+        # запускает игру
+        start_game(ai_settings, screen, stats, ship, aliens, bullets)
 
 
 def fire_bullet(ai_settings, screen, ship, bullets):
