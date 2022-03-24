@@ -2,8 +2,8 @@ import pygame
 from pygame.sprite import Group
 
 import game_functions as gf
-from game_stats import GameStats
 from button import Button
+from game_stats import GameStats
 from jet_flame import JetFlame
 from settings import Settings
 from ship import Ship
@@ -53,7 +53,7 @@ def run():
 
     while True:
         # отслеживание нажатия клавиш
-        gf.check_events(ship, bullets, ai_set, sc, stats, play_button)
+        gf.check_events(ship, aliens, bullets, ai_set, sc, stats, play_button)
 
         if stats.game_active:
             # обновление неба
@@ -71,8 +71,8 @@ def run():
             gf.update_aliens(ai_set, stats, sc, ship, aliens, bullets)
 
         # Обновляет изображения на экране и отображает новый экран.
-        gf.update_screen(ai_set, sc, stats, ship, flame_r, flame_l, bullets, aliens,
-                         stars, explosions, play_button)
+        gf.update_screen(ai_set, sc, stats, ship, flame_r, flame_l, bullets,
+                         aliens, stars, explosions, play_button)
 
 
 run()
