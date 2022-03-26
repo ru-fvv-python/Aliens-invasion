@@ -287,8 +287,8 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, 
                                       downed_aliens)
             explosions.add(new_explosion)
 
-            # ведение счета
-            stats.score += ai_settings.alien_points
+            # ведение счета: начисление очков за всех пришельцев из списка
+            stats.score += ai_settings.alien_points * len(downed_aliens)
             sb.prep_score()
 
     if len(aliens) == 0:

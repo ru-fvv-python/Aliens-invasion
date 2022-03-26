@@ -18,8 +18,8 @@ class Settings():
         self.zoom = 2  # коэффициент уменьшения картинки.
 
         # параметры пули -------------------------------------------
-        self.bullet_with = 3
-        self.bullet_height = 15
+        self.bullet_with = 5
+        self.bullet_height = 25
         self.bullet_color = (219, 138, 17)
         self.bullets_allowed = 3
 
@@ -28,9 +28,9 @@ class Settings():
 
         # настройки звезд -----------------------------------------
         self.star_speed = 1  # коэффициент скорости звезд
-        self.space_between_stars = 1  # коэффициент расстояния между звезд
+        self.space_between_stars = 0.7  # коэффициент расстояния между звезд
         self.star_width = 150  # ширина звезды
-        self.star_height = 150  # высота звезды
+        self.star_height = 300  # высота звезды
         self.offset = 100  # смещение по осям +-
 
         # Темп ускорения игры
