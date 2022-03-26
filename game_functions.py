@@ -262,7 +262,7 @@ def update_stars(stars):
     stars.update()
 
 
-def update_bullets(ai_settings, screen, ship, aliens, bullets, explosions):
+def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets, explosions):
     """Обновляет позиции пуль и уничтожает старые пули."""
     # вызывает bullet.update() для каждой пули, включенной в группу bullets
     bullets.update()
@@ -271,11 +271,11 @@ def update_bullets(ai_settings, screen, ship, aliens, bullets, explosions):
         if bullet.rect.bottom <= 0:
             bullets.remove(bullet)
     # Обработка коллизий пуль с пришельцами.
-    check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets,
+    check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, bullets,
                                   explosions)
 
 
-def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets,
+def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens, bullets,
                                   explosions):
     """Обработка коллизий пуль с пришельцами."""
     # При обнаружении попадания удалить пулю и пришельца.
@@ -286,6 +286,10 @@ def check_bullet_alien_collisions(ai_settings, screen, ship, aliens, bullets,
             new_explosion = Explosion('sprite-explosion', 8, 6, screen,
                                       downed_aliens)
             explosions.add(new_explosion)
+
+            # ведение счета
+            stats.score += ai_settings.alien_points
+            sb.prep_score()
 
     if len(aliens) == 0:
         # Уничтожение пуль, повышение скорости и создание нового флота.
