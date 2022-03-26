@@ -301,7 +301,7 @@ def update_explosions(explosions):
     explosions.update()
 
 
-def update_screen(ai_settings, screen, stats, ship, flame_r, flame_l, bullets,
+def update_screen(ai_settings, screen, stats, sb, ship, flame_r, flame_l, bullets,
                   aliens, stars, explosion, play_button):
     """Обновляет изображения на экране и отображает новый экран."""
     # рисуем фон экрана
@@ -326,6 +326,9 @@ def update_screen(ai_settings, screen, stats, ship, flame_r, flame_l, bullets,
 
     # вывод пришельцев
     aliens.draw(screen)
+
+    # вывод счета
+    sb.show_score()
 
     # Кнопка Play отображается в том случае, если игра не активна
     if not stats.game_active:

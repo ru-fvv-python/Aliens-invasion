@@ -7,6 +7,7 @@ from game_stats import GameStats
 from jet_flame import JetFlame
 from settings import Settings
 from ship import Ship
+from scoreboard import Scoreboard
 
 
 def run():
@@ -25,8 +26,9 @@ def run():
     # Создание кнопки Play
     play_button = Button(ai_set, sc, 'Play')
 
-    # Создание экземпляра для хранения игровой статистики.
+    # Создание экземпляра для хранения игровой статистики и счета.
     stats = GameStats(ai_set)
+    sb = Scoreboard(ai_set, sc, stats)
 
     # корабль
     ship = Ship(ai_set, sc)
@@ -71,7 +73,7 @@ def run():
             gf.update_aliens(ai_set, stats, sc, ship, aliens, bullets)
 
         # Обновляет изображения на экране и отображает новый экран.
-        gf.update_screen(ai_set, sc, stats, ship, flame_r, flame_l, bullets,
+        gf.update_screen(ai_set, sc, stats, sb, ship, flame_r, flame_l, bullets,
                          aliens, stars, explosions, play_button)
 
 

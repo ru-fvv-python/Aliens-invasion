@@ -11,8 +11,8 @@ class Button():
 
         # Назначение размеров и свойств кнопок
         self.width, self.height = 200, 50
-        self.button_color = (148, 172, 176)
-        self.text_color = (255, 204, 0)
+        self.button_color = (222, 252, 255)
+        self.text_color = (153, 190, 190)
         self.font = pygame.font.SysFont(None, 48)
 
         # Построение объекта rect кнопки и выравнивание по центру экрана
