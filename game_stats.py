@@ -18,4 +18,4 @@ class GameStats():
         """Инициализирует статистику, изменяющуюся в ходе игры."""
         self.ship_left = self.ai_settings.ship_limit
         self.score = 0  # очки игрока
-
+        self.level = 1

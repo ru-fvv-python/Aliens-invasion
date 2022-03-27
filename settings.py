@@ -18,7 +18,7 @@ class Settings():
         self.zoom = 2  # коэффициент уменьшения картинки.
 
         # параметры пули -------------------------------------------
-        self.bullet_with = 5
+        self.bullet_with = 4
         self.bullet_height = 25
         self.bullet_color = (219, 138, 17)
         self.bullets_allowed = 3
@@ -45,11 +45,12 @@ class Settings():
         """ Инициализирует настройки изменящиеся в ходе игры """
         self.alien_speed_factor = 3
         self.bullet_speed_factor = 15
-        self.speed = 6
+        self.speed = 8
         # fleet_direction = 1 обозначает движение вправо; а -1 - влево.
         self.fleet_direction = -1
         # Подсчет очков
         self.alien_points = 50
+
 
     def increase_speed(self):
         """Увеличивает настройки скорости и стоимости пришельцев"""
