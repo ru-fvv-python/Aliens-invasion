@@ -13,7 +13,7 @@ class Scoreboard():
 
         # Настройка шрифта для вывода счета
         self.text_color = (255, 204, 0)
-        self.font = pygame.font.SysFont(None, 48)
+        self.font = pygame.font.SysFont('hack', 30)
 
         # Подготовка исходного изображения счетов
         self.prep_score()
@@ -24,7 +24,7 @@ class Scoreboard():
         """Преобразует текущий счет в графическое изображение"""
         # текущий счет
         rounded_score = int(round(self.stats.score, -1))
-        score_str = '{:,}'.format(rounded_score)
+        score_str = 'score: {:,}'.format(rounded_score).replace(',', '.')
         self.score_image = self.font.render(score_str, True, self.text_color,
                                             self.ai_settings.bg_color)
 
@@ -37,7 +37,8 @@ class Scoreboard():
         """Преобразует рекордный счет в графическое изображение"""
         # рекорд
         rounded_high_score = int(round(self.stats.high_score, -1))
-        high_score_str = '{:,}'.format(rounded_high_score)
+        high_score_str = 'high score: {:,}'.format(rounded_high_score).replace(
+            ',', '.')
         self.high_score_image = self.font.render(high_score_str, True,
                                                  self.text_color,
                                                  self.ai_settings.bg_color)
@@ -49,7 +50,8 @@ class Scoreboard():
 
     def prep_level(self):
         """Преобразует уровень в графическое изображение."""
-        self.level_image = self.font.render(str(self.stats.level), True,
+        self.level_image = self.font.render('level: ' + str(self.stats.level),
+                                            True,
                                             self.text_color,
                                             self.ai_settings.bg_color)
 
