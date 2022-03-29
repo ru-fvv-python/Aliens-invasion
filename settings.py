@@ -18,7 +18,7 @@ class Settings():
         self.zoom = 2  # коэффициент уменьшения картинки.
 
         # параметры пули -------------------------------------------
-        self.bullet_with = 4
+        self.bullet_with = 3
         self.bullet_height = 25
         self.bullet_color = (219, 138, 17)
         self.bullets_allowed = 3

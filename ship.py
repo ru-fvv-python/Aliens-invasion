@@ -1,17 +1,24 @@
 import pygame
+from pygame.sprite import Sprite
 
 
-class Ship():
+class Ship(Sprite):
     """реализует бульшую часть поведения корабля."""
 
-    def __init__(self, ai_settings, screen):
+    def __init__(self, ai_settings, screen, zoom):
         """Инициализирует корабль и задает его начальную позицию."""
+        super(Ship, self).__init__()
+
         self.ai_settings = ai_settings
         self.screen = screen
         self.screen_rect = screen.get_rect()
         self.image_forward = pygame.image.load('images/forward.png') \
             .convert_alpha()
-        self.image = self.image_forward
+        self.image = pygame.transform.scale(
+            self.image_forward,
+            (self.image_forward.get_width() // zoom,
+             self.image_forward.get_height() // zoom)
+        )
         file_left = 'left'
         file_right = 'right'
         self.left_images = []

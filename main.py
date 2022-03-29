@@ -31,7 +31,7 @@ def run():
     sb = Scoreboard(ai_set, sc, stats)
 
     # корабль
-    ship = Ship(ai_set, sc)
+    ship = Ship(ai_set, sc, 1)
     # огони двигателя: правый и левый
     flame_r = JetFlame(ship, ai_set.offset_jet, ai_set.zoom)
     flame_l = JetFlame(ship, -ai_set.offset_jet, ai_set.zoom)
@@ -65,12 +65,10 @@ def run():
             gf.update_bullets(ai_set, sc, stats, sb, ship, aliens, bullets, explosions)
 
             # Обновляет позицию пришельцев
-            gf.update_aliens(ai_set, stats, sc, ship, aliens, bullets)
+            gf.update_aliens(ai_set, stats, sc, sb, ship, aliens, bullets)
 
             # обновляет взрывы
             gf.update_explosions(explosions)
-
-            gf.update_aliens(ai_set, stats, sc, ship, aliens, bullets)
 
         # Обновляет изображения на экране и отображает новый экран.
         gf.update_screen(ai_set, sc, stats, sb, ship, flame_r, flame_l, bullets,
