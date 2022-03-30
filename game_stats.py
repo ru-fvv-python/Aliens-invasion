@@ -1,3 +1,5 @@
+import json
+
 class GameStats():
     """Отслеживание статистики для игры Alien Invasion"""
 
@@ -10,7 +12,7 @@ class GameStats():
         self.game_active = False
 
         # Рекорд не должен сбрасываться
-        self.high_score = 0
+        self.high_score = self.get_record
 
         self.reset_stats()
 
@@ -19,3 +21,15 @@ class GameStats():
         self.ship_left = self.ai_settings.ship_limit
         self.score = 0  # очки игрока
         self.level = 1
+
+    @property
+    def get_record(self):
+        """ получает рекорд из файла"""
+        filename = 'highrecord.json'
+        try:
+            with open(filename, 'r') as f_obj:
+                record = json.load(f_obj)
+        except FileNotFoundError:
+            return 0
+        else:
+            return record

@@ -2,6 +2,7 @@ from random import randint
 from time import sleep
 
 import pygame
+import json
 
 from alien import Alien
 from bullet import Bullet
@@ -11,11 +12,36 @@ from star import Star
 clock = pygame.time.Clock()
 
 
+def save_record(new_record):
+    """сохраняет рекорд в файл"""
+    filename = 'highrecord.json'
+    with open(filename, 'w') as f_obj:
+        json.dump(new_record, f_obj)
+
+
+def chec_record(stats) -> int:
+    """сравнивает рекорд в файле с текущим
+    и возвращает наибольшее"""
+    filename = 'highrecord.json'
+    try:
+        with open(filename, 'r') as f_obj:
+            high_score_old = json.load(f_obj)
+    except FileNotFoundError:
+        return stats.high_score
+    else:
+        if stats.high_score > high_score_old:
+            return stats.high_score
+        else:
+            return high_score_old
+
+
 def check_events(sb, ship, aliens, bullets, ai_settings, screen, stats,
                  play_button):
     """Обрабатывает нажатия клавиш"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
+            new_record = chec_record(stats)
+            save_record(new_record)
             exit()
         elif event.type == pygame.KEYUP:
             if event.key == pygame.K_RIGHT:
@@ -30,6 +56,8 @@ def check_events(sb, ship, aliens, bullets, ai_settings, screen, stats,
                 # запускает игру
                 start_game(ai_settings, screen, stats, ship, aliens, bullets)
             elif event.key == pygame.K_q:
+                new_record = chec_record(stats)
+                save_record(new_record)
                 exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
