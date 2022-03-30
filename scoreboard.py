@@ -18,10 +18,13 @@ class Scoreboard():
         self.font = pygame.font.SysFont('hack', 30)
 
         # Подготовка исходного изображения счетов
+        self.prep_image()
+
+    def prep_image(self):
+        """Подготовка исходного изображения счетов"""
         self.prep_score()
         self.prep_high_score()
         self.prep_level()
-
         self.prep_ships()
 
     def prep_ships(self):

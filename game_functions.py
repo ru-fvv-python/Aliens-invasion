@@ -104,14 +104,12 @@ def check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens,
         stats.reset_stats()
         stats.game_active = True
 
-        # Сброс изображений счетов и уровня.
-        sb.prep_score()
-        sb.prep_high_score()
-        sb.prep_level()
-        sb.prep_ships()
+        # Подготовка исходного изображения счетов.
+        sb.prep_image()
 
         # запускает игру
         start_game(ai_settings, screen, stats, ship, aliens, bullets)
+
 
 def fire_bullet(ai_settings, screen, ship, bullets):
     """Выпускает пулю, если максимум еще не достигнут"""
@@ -345,17 +343,22 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens,
 
     if len(aliens) == 0:
         # Если весь флот уничтожен, начинается следующий уровень.
-        # Уничтожение пуль
-        bullets.empty()
-        # повышение скорости
-        ai_settings.increase_speed()
-        ship.speed_ship = ai_settings.speed
-        # создание нового флота
-        create_fleet(ai_settings, screen, ship, aliens)
-        ai_settings.fleet_direction = -1
-        # Увеличение уровня
-        stats.level += 1
-        sb.prep_level()
+        start_new_level(ai_settings, screen, stats, sb, ship, aliens, bullets)
+
+
+def start_new_level(ai_settings, screen, stats, sb, ship, aliens, bullets):
+    """начинает следующий уровень."""
+    # Уничтожение пуль
+    bullets.empty()
+    # повышение скорости
+    ai_settings.increase_speed()
+    ship.speed_ship = ai_settings.speed
+    # создание нового флота
+    create_fleet(ai_settings, screen, ship, aliens)
+    ai_settings.fleet_direction = -1
+    # Увеличение уровня
+    stats.level += 1
+    sb.prep_level()
 
 
 def check_high_score(stats, sb):
