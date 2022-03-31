@@ -1,8 +1,8 @@
+import json
 from random import randint
 from time import sleep
 
 import pygame
-import json
 
 from alien import Alien
 from bullet import Bullet
@@ -36,7 +36,7 @@ def chec_record(stats) -> int:
 
 
 def check_events(sb, ship, aliens, bullets, ai_settings, screen, stats,
-                 play_button):
+                 play_button, s_cannon):
     """Обрабатывает нажатия клавиш"""
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
@@ -48,10 +48,16 @@ def check_events(sb, ship, aliens, bullets, ai_settings, screen, stats,
                 ship.flRightUp = True
             elif event.key == pygame.K_LEFT:
                 ship.flLeftUp = True
+            elif event.key == pygame.K_KP_PLUS:
+                ai_settings.vol += 0.1
+                pygame.mixer.music.set_volume(ai_settings.vol)
+            elif event.key == pygame.K_KP_MINUS:
+                ai_settings.vol -= 0.1
+                pygame.mixer.music.set_volume(ai_settings.vol)
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
                 # стрельба из пушки
-                fire_bullet(ai_settings, screen, ship, bullets)
+                fire_bullet(ai_settings, screen, ship, bullets, s_cannon)
             elif event.key == pygame.K_p and not stats.game_active:
                 # запускает игру
                 start_game(ai_settings, screen, stats, ship, aliens, bullets)
@@ -61,7 +67,8 @@ def check_events(sb, ship, aliens, bullets, ai_settings, screen, stats,
                 exit()
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
-            check_play_button(ai_settings, screen, stats, sb, play_button, ship,
+            check_play_button(ai_settings, screen, stats, sb, play_button,
+                              ship,
                               aliens, bullets, mouse_x, mouse_y)
 
 
@@ -86,7 +93,8 @@ def start_game(ai_settings, screen, stats, ship, aliens, bullets):
     ship.center_ship()  # его центровка
 
 
-def check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens,
+def check_play_button(ai_settings, screen, stats, sb, play_button, ship,
+                      aliens,
                       bullets,
                       mouse_x, mouse_y):
     """Запускает новую игру при нажатии кнопки Play"""
@@ -111,12 +119,14 @@ def check_play_button(ai_settings, screen, stats, sb, play_button, ship, aliens,
         start_game(ai_settings, screen, stats, ship, aliens, bullets)
 
 
-def fire_bullet(ai_settings, screen, ship, bullets):
+def fire_bullet(ai_settings, screen, ship, bullets, s_cannon):
     """Выпускает пулю, если максимум еще не достигнут"""
     # Создание новой пули и включение ее в группу bullets.
     if len(bullets) < ai_settings.bullets_allowed:
         new_bullet = Bullet(ai_settings, screen, ship)
         bullets.add(new_bullet)
+        # звук выстрела из пушки
+        s_cannon.play()
 
 
 def get_number_aliens_x(ai_settings, alien_width):
@@ -307,7 +317,7 @@ def update_stars(stars):
 
 
 def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets,
-                   explosions):
+                   explosions, s_explosion):
     """Обновляет позиции пуль и уничтожает старые пули."""
     # вызывает bullet.update() для каждой пули, включенной в группу bullets
     bullets.update()
@@ -317,13 +327,11 @@ def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets,
             bullets.remove(bullet)
     # Обработка коллизий пуль с пришельцами.
     check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens,
-                                  bullets,
-                                  explosions)
+                                  bullets, explosions, s_explosion)
 
 
 def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens,
-                                  bullets,
-                                  explosions):
+                                  bullets, explosions, s_explosion):
     """Обработка коллизий пуль с пришельцами."""
     # При обнаружении попадания удалить пулю и пришельца.
     collisions = pygame.sprite.groupcollide(bullets, aliens, True, True)
@@ -333,6 +341,9 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens,
             new_explosion = Explosion('sprite-explosion', 8, 6, screen,
                                       downed_aliens)
             explosions.add(new_explosion)
+
+            # звук взрыва
+            s_explosion.play()
 
             # ведение счета: начисление очков за всех пришельцев из списка
             stats.score += ai_settings.alien_points * len(downed_aliens)

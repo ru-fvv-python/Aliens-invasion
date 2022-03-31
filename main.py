@@ -5,12 +5,15 @@ import game_functions as gf
 from button import Button
 from game_stats import GameStats
 from jet_flame import JetFlame
+from scoreboard import Scoreboard
 from settings import Settings
 from ship import Ship
-from scoreboard import Scoreboard
 
 
 def run():
+    # важно прописать до pygame.init()
+    pygame.mixer.pre_init(44100, -16, 1, 512)
+
     pygame.init()
 
     ai_set = Settings()
@@ -22,6 +25,17 @@ def run():
     pygame.display.set_caption('Aliens invasion')
     pygame.display.set_icon(
         pygame.image.load('images/icon_app.png').convert_alpha())
+
+    # звуки
+    # фоновая музыка
+    pygame.mixer.music.load('sounds/space_music.mp3')
+    pygame.mixer.music.play(-1)
+
+    # звук выстрела из пушки
+    s_cannon = pygame.mixer.Sound('sounds/cannon.wav')
+
+    # звук взрыва
+    s_explosion = pygame.mixer.Sound('sounds/explosion.mp3')
 
     # Создание кнопки Play
     play_button = Button(ai_set, sc, 'Play')
@@ -55,14 +69,16 @@ def run():
 
     while True:
         # отслеживание нажатия клавиш
-        gf.check_events(sb, ship, aliens, bullets, ai_set, sc, stats, play_button)
+        gf.check_events(sb, ship, aliens, bullets, ai_set, sc, stats,
+                        play_button, s_cannon)
 
         if stats.game_active:
             # обновление неба
             gf.update_stars(stars)
 
             # Обновляет позиции пуль и уничтожает старые пули.
-            gf.update_bullets(ai_set, sc, stats, sb, ship, aliens, bullets, explosions)
+            gf.update_bullets(ai_set, sc, stats, sb, ship, aliens, bullets,
+                              explosions, s_explosion)
 
             # Обновляет позицию пришельцев
             gf.update_aliens(ai_set, stats, sc, sb, ship, aliens, bullets)
@@ -71,7 +87,8 @@ def run():
             gf.update_explosions(explosions)
 
         # Обновляет изображения на экране и отображает новый экран.
-        gf.update_screen(ai_set, sc, stats, sb, ship, flame_r, flame_l, bullets,
+        gf.update_screen(ai_set, sc, stats, sb, ship, flame_r, flame_l,
+                         bullets,
                          aliens, stars, explosions, play_button)
 
 

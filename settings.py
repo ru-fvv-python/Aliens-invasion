@@ -41,6 +41,9 @@ class Settings():
         # установка начальной скорости
         self.initialize_dynamic_settings()
 
+        # громкость
+        self.vol = 1.0
+
     def initialize_dynamic_settings(self):
         """ Инициализирует настройки изменящиеся в ходе игры """
         self.alien_speed_factor = 3
