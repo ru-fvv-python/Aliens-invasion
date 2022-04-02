@@ -1,10 +1,12 @@
 import json
 from random import randint
+import random
 from time import sleep
 
 import pygame
 
 from alien import Alien
+from alien_bullet import BulletAlien
 from bullet import Bullet
 from explosion import Explosion
 from star import Star
@@ -168,6 +170,19 @@ def create_alien(ai_settings, screen, aliens, alien_number, row_number):
     aliens.add(alien)
 
 
+def create_bullet_alien(ai_settings, screen, aliens, bullets_alien, s_laser):
+    """Создает пулю пришельца"""
+    time_now = pygame.time.get_ticks()
+
+    if time_now - ai_settings.last_shot > ai_settings.alien_cooldown and len(
+            bullets_alien) < ai_settings.bullets_alien_allowed and len(aliens) > 0:
+        attacking_alien = random.choice(aliens.sprites())
+        new_bullet = BulletAlien(ai_settings, screen, attacking_alien)
+        bullets_alien.add(new_bullet)
+        ai_settings.last_shot = time_now
+        s_laser.play()
+
+
 def create_fleet(ai_settings, screen, ship, aliens):
     """Создает флот пришельцев."""
     # Создание пришельца и вычисление количества пришельцев в ряду.
@@ -316,6 +331,12 @@ def update_stars(stars):
     stars.update()
 
 
+def update_bullets_aliens(bullets_alien):
+    """Обновляет позиции пуль и уничтожает старые пули."""
+    # вызывает update() для каждой пули, включенной в группу bullets_alien
+    bullets_alien.update()
+
+
 def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets,
                    explosions, s_explosion):
     """Обновляет позиции пуль и уничтожает старые пули."""
@@ -386,7 +407,7 @@ def update_explosions(explosions):
 
 
 def update_screen(ai_settings, screen, stats, sb, ship, flame_r, flame_l,
-                  bullets,
+                  bullets, bullets_alien,
                   aliens, stars, explosion, play_button):
     """Обновляет изображения на экране и отображает новый экран."""
     # рисуем фон экрана
@@ -397,6 +418,10 @@ def update_screen(ai_settings, screen, stats, sb, ship, flame_r, flame_l,
 
     # Все пули выводятся позади изображений корабля и пришельцев.
     for bullet in bullets.sprites():
+        bullet.draw_bullet()
+
+    # пули пришельцев.
+    for bullet in bullets_alien.sprites():
         bullet.draw_bullet()
 
     # рисуем корабль

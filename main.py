@@ -33,6 +33,7 @@ def run():
 
     # звук выстрела из пушки
     s_cannon = pygame.mixer.Sound('sounds/cannon.wav')
+    s_laser = pygame.mixer.Sound('sounds/laser.wav')
 
     # звук взрыва
     s_explosion = pygame.mixer.Sound('sounds/explosion.mp3')
@@ -54,6 +55,8 @@ def run():
     stars = Group()
     # Создание группы для хранения пуль.
     bullets = Group()
+    # Создание группы для хранения пуль пришельцев.
+    bullets_alien = Group()
 
     # создание группы для взрывов
     explosions = Group()
@@ -83,13 +86,19 @@ def run():
             # Обновляет позицию пришельцев
             gf.update_aliens(ai_set, stats, sc, sb, ship, aliens, bullets)
 
+            # выстрел пришельца
+            gf.create_bullet_alien(ai_set, sc, aliens, bullets_alien,
+                                   s_laser)
+            # Обновляет позиции пуль пришельцев
+            gf.update_bullets_aliens(bullets_alien)
+
             # обновляет взрывы
             gf.update_explosions(explosions)
 
         # Обновляет изображения на экране и отображает новый экран.
         gf.update_screen(ai_set, sc, stats, sb, ship, flame_r, flame_l,
-                         bullets,
-                         aliens, stars, explosions, play_button)
+                         bullets, bullets_alien, aliens, stars, explosions,
+                         play_button)
 
 
 run()

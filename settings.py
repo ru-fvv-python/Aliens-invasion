@@ -1,4 +1,7 @@
-class Settings():
+import pygame
+
+
+class Settings:
     """Класс для хранения всех настроек игры Alien Invasion."""
 
     def __init__(self):
@@ -22,6 +25,14 @@ class Settings():
         self.bullet_height = 25
         self.bullet_color = (219, 138, 17)
         self.bullets_allowed = 3
+
+        # параметры пули пришельцев -------------------------------------
+        self.bullet_alien_with = 3
+        self.bullet_alien_height = 25
+        self.bullet_alien_color = (105, 213, 244)
+        self.bullets_alien_allowed = 5
+        self.alien_cooldown = 1000  # промежуток времени между выстрелами
+        self.last_shot = pygame.time.get_ticks()
 
         # настройки пришельцев -----------------------------------------
         self.alien_drop_speed = 20
@@ -48,12 +59,12 @@ class Settings():
         """ Инициализирует настройки изменящиеся в ходе игры """
         self.alien_speed_factor = 3
         self.bullet_speed_factor = 15
+        self.bullet_alien_speed_factor = 10
         self.speed = 8
         # fleet_direction = 1 обозначает движение вправо; а -1 - влево.
         self.fleet_direction = -1
         # Подсчет очков
         self.alien_points = 50
-
 
     def increase_speed(self):
         """Увеличивает настройки скорости и стоимости пришельцев"""
