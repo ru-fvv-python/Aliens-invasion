@@ -1,6 +1,6 @@
 import json
-from random import randint
 import random
+from random import randint
 from time import sleep
 
 import pygame
@@ -172,10 +172,18 @@ def create_alien(ai_settings, screen, aliens, alien_number, row_number):
 
 def create_bullet_alien(ai_settings, screen, aliens, bullets_alien, s_laser):
     """Создает пулю пришельца"""
+
+    cooldown_list = []
+
+    for cooldown in range(2000, 5000, 500):
+        cooldown_list.append(cooldown)
+    cooldown = random.choice(cooldown_list)
+
     time_now = pygame.time.get_ticks()
 
-    if time_now - ai_settings.last_shot > ai_settings.alien_cooldown and len(
-            bullets_alien) < ai_settings.bullets_alien_allowed and len(aliens) > 0:
+    if time_now - ai_settings.last_shot > cooldown and len(
+            bullets_alien) < ai_settings.bullets_alien_allowed and len(
+        aliens) > 0:
         attacking_alien = random.choice(aliens.sprites())
         new_bullet = BulletAlien(ai_settings, screen, attacking_alien)
         bullets_alien.add(new_bullet)
@@ -307,7 +315,8 @@ def check_aliens_bottom(ai_settings, stats, screen, sb, ship, aliens, bullets):
             break
 
 
-def update_aliens(ai_settings, stats, screen, sb, ship, aliens, bullets):
+def update_aliens(ai_settings, stats, screen, sb, ship, aliens, bullets,
+                  explosions, s_explosion):
     """
     Проверяет, достиг ли флот края экрана,
     после чего обновляет позиции всех пришельцев во флоте.
@@ -317,8 +326,23 @@ def update_aliens(ai_settings, stats, screen, sb, ship, aliens, bullets):
     # вызывает alien.update() для каждого чужого из группы aliens
     aliens.update()
 
+    # При столкновении удалить пришельца.
+    collisions = pygame.sprite.spritecollide(ship, aliens, True)
+
     # Проверка коллизий "пришелец-корабль".
-    if pygame.sprite.spritecollideany(ship, aliens):
+    if collisions:
+        # создание взрыва корабля
+        new_explosion = Explosion('sprite-explosion', 8, 6, screen, ship=ship)
+        explosions.add(new_explosion)
+        s_explosion.play()
+
+        for rammed_alien in collisions:
+            # создание взрыва пришельца
+            new_explosion = Explosion('sprite-explosion', 8, 6, screen,
+                                      rammed_alien=rammed_alien)
+            explosions.add(new_explosion)
+            s_explosion.play()
+
         # Обрабатывает столкновение корабля с пришельцем
         ship_hit(ai_settings, stats, screen, sb, ship, aliens, bullets)
 
@@ -331,10 +355,23 @@ def update_stars(stars):
     stars.update()
 
 
-def update_bullets_aliens(bullets_alien):
+def update_bullets_aliens(screen, bullets_alien, ship, explosions,
+                          s_explosion):
     """Обновляет позиции пуль и уничтожает старые пули."""
     # вызывает update() для каждой пули, включенной в группу bullets_alien
+
     bullets_alien.update()
+    """Обработка коллизий пуль с кораблем."""
+    # При обнаружении попадания удалить пулю .
+    collisions = pygame.sprite.spritecollide(ship, bullets_alien, True)
+    if collisions:
+        # создание взрыва
+        new_explosion = Explosion('sprite-explosion', 8, 6, screen,
+                                  ship=ship)
+        explosions.add(new_explosion)
+
+        # звук взрыва
+        s_explosion.play()
 
 
 def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets,
@@ -360,7 +397,7 @@ def check_bullet_alien_collisions(ai_settings, screen, stats, sb, ship, aliens,
         for downed_aliens in collisions.values():
             # создание взрыва
             new_explosion = Explosion('sprite-explosion', 8, 6, screen,
-                                      downed_aliens)
+                                      downed_aliens=downed_aliens)
             explosions.add(new_explosion)
 
             # звук взрыва

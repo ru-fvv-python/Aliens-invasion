@@ -5,17 +5,22 @@ from pygame.sprite import Sprite
 class Explosion(Sprite):
     """ класс для создания взрыва"""
 
-    def __init__(self, file_sprites, columns, rows, screen, downed_aliens):
+    def __init__(self, file_sprites, columns, rows, screen, downed_aliens=None,
+                 rammed_alien=None, ship=None):
         """описывает взрыв
             file_sprites - файл со спрайтами,
             columns - число колонок со спрайтами,
             rows - число строк со спрайтами,
             screen - экран,
-            downed_aliens - список сбитых чужих
+            downed_aliens - список сбитых пришельцев пулями
+            rammed_alien - пришелец протараненный кораблем игрока
+            ship - подвитый корабль игрока пулей или протараненный пришельцем
         """
         super().__init__()
         self.screen = screen
         self.downed_aliens = downed_aliens
+        self.rammed_alien = rammed_alien
+        self.ship = ship
 
         # читаем файл со спрайтами
         image_sprites = pygame.image.load(
@@ -61,10 +66,26 @@ class Explosion(Sprite):
         # номер спрайта (для отрисовки взрыва)
         self.number_sprite = 0
 
-        # берем координаты сбитого пришельца и меняет флаг взрыва
-        for downed_alien in self.downed_aliens:
-            # присваиваем координаты сбитого корабля поверхности для взрыва
-            self.rect.center = downed_alien.rect.center
+        # определяем координаты для взрыва
+        # берем координаты сбитого пулей пришельца
+        if self.downed_aliens is not None:
+            for downed_alien in self.downed_aliens:
+                # присваиваем координаты сбитого корабля поверхности для взрыва
+                self.rect.center = downed_alien.rect.center
+                #  активируем флаг взрыва
+                self.flExp = True
+
+        # берем координаты протараненного кораблем пришельца
+        if self.rammed_alien is not None:
+            # присваиваем координаты пришельца поверхности для взрыва
+            self.rect.center = rammed_alien.rect.center
+            #  активируем флаг взрыва
+            self.flExp = True
+
+        # берем координаты подбитого корабля игрока
+        if self.ship is not None:
+            # присваиваем координаты корабля поверхности для взрыва
+            self.rect.center = ship.rect.center
             #  активируем флаг взрыва
             self.flExp = True
 
