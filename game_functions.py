@@ -355,12 +355,12 @@ def update_stars(stars):
     stars.update()
 
 
-def update_bullets_aliens(screen, bullets_alien, ship, explosions,
+def update_bullets_aliens(screen, bullets_alien, ship, shild, explosions,
                           s_explosion):
     """Обновляет позиции пуль и уничтожает старые пули."""
     # вызывает update() для каждой пули, включенной в группу bullets_alien
-
     bullets_alien.update()
+
     """Обработка коллизий пуль с кораблем."""
     # При обнаружении попадания удалить пулю .
     collisions = pygame.sprite.spritecollide(ship, bullets_alien, True)
@@ -372,6 +372,9 @@ def update_bullets_aliens(screen, bullets_alien, ship, explosions,
 
         # звук взрыва
         s_explosion.play()
+
+        # уменьшает энергию щита
+        shild.shild_reducted()
 
 
 def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets,
@@ -444,8 +447,8 @@ def update_explosions(explosions):
 
 
 def update_screen(ai_settings, screen, stats, sb, ship, flame_r, flame_l,
-                  bullets, bullets_alien,
-                  aliens, stars, explosion, play_button):
+                  shild, bullets, bullets_alien, aliens, stars, explosion,
+                  play_button):
     """Обновляет изображения на экране и отображает новый экран."""
     # рисуем фон экрана
     screen.fill(ai_settings.bg_color)
@@ -471,6 +474,9 @@ def update_screen(ai_settings, screen, stats, sb, ship, flame_r, flame_l,
     screen.blit(flame_r.image, flame_r.rect)
     screen.blit(flame_l.image, flame_l.rect)
 
+    # рисуем щит корабля
+    shild.draw_shild()
+
     # вывод пришельцев
     aliens.draw(screen)
 
@@ -489,3 +495,4 @@ def update_screen(ai_settings, screen, stats, sb, ship, flame_r, flame_l,
     ship.update()
     flame_r.update()
     flame_l.update()
+    shild.update()

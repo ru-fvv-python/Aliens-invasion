@@ -7,6 +7,7 @@ from game_stats import GameStats
 from jet_flame import JetFlame
 from scoreboard import Scoreboard
 from settings import Settings
+from shild import Shild
 from ship import Ship
 
 
@@ -50,6 +51,8 @@ def run():
     # огони двигателя: правый и левый
     flame_r = JetFlame(ship, ai_set.offset_jet, ai_set.zoom)
     flame_l = JetFlame(ship, -ai_set.offset_jet, ai_set.zoom)
+    # щит
+    shild = Shild(ai_set, sc, ship)
 
     # создание группы звезд
     stars = Group()
@@ -90,14 +93,14 @@ def run():
             # выстрел пришельца
             gf.create_bullet_alien(ai_set, sc, aliens, bullets_alien, s_laser)
             # Обновляет позиции пуль пришельцев
-            gf.update_bullets_aliens(sc, bullets_alien, ship, explosions,
-                                     s_explosion)
+            gf.update_bullets_aliens(sc, bullets_alien, ship, shild,
+                                     explosions, s_explosion)
 
             # обновляет взрывы
             gf.update_explosions(explosions)
 
         # Обновляет изображения на экране и отображает новый экран.
-        gf.update_screen(ai_set, sc, stats, sb, ship, flame_r, flame_l,
+        gf.update_screen(ai_set, sc, stats, sb, ship, flame_r, flame_l, shild,
                          bullets, bullets_alien, aliens, stars, explosions,
                          play_button)
 

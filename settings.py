@@ -1,5 +1,3 @@
-from random import randrange
-
 import pygame
 
 
@@ -17,8 +15,13 @@ class Settings:
 
         # параметры карабля ----------------------------------------
         self.ship_limit = 3  # ограничение количества кораблей
-        self.color_red = (234, 30, 10)
-        self.color_blue = (105, 213, 244)
+        # цвета для щита
+        self.shild_width = 200
+        self.shild_height = 50
+        self.color_red = (255, 0, 0)
+        self.color_blue = (0, 0, 255)
+        # уменьшение энергии щита за одно отражение снаряда
+        self.shild_reduction = 0.1
 
         # параметры для пламени двигателя игрока -------------------
         self.offset_jet = 17  # смещение относительно центра под двигатель
@@ -64,6 +67,7 @@ class Settings:
         self.bullet_speed_factor = 10
         self.bullet_alien_speed_factor = 10
         self.speed = 5
+        self.ship_shild = 1.0  # энергетический щит
         # fleet_direction = 1 обозначает движение вправо; а -1 - влево.
         self.fleet_direction = -1
         # Подсчет очков
