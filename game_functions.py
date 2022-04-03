@@ -275,7 +275,7 @@ def create_star_sky(ai_settings, stars):
 
 # ----------------------------- updates --------------------------------------
 
-def ship_hit(ai_settings, stats, screen, sb, ship, aliens, bullets):
+def ship_hit(ai_settings, stats, screen, sb, ship, shild, aliens, bullets):
     """Обрабатывает столкновение корабля с пришельцем."""
     # если у игрока есть дополнительныек корабли
     if stats.ship_left > 0:
@@ -293,6 +293,7 @@ def ship_hit(ai_settings, stats, screen, sb, ship, aliens, bullets):
         create_fleet(ai_settings, screen, ship, aliens)
         ai_settings.fleet_direction = -1
         ship.center_ship()
+        shild.shild_recovery()
 
         # Пауза.
         sleep(0.5)
@@ -304,18 +305,20 @@ def ship_hit(ai_settings, stats, screen, sb, ship, aliens, bullets):
         pygame.mouse.set_visible(True)
 
 
-def check_aliens_bottom(ai_settings, stats, screen, sb, ship, aliens, bullets):
+def check_aliens_bottom(ai_settings, stats, screen, sb, ship, shild, aliens,
+                        bullets):
     """Проверяет, добрались ли пришельцы до нижнего края экрана."""
     screen_rect = screen.get_rect()
 
     for alien in aliens.sprites():
         if alien.rect.bottom >= screen_rect.bottom:
             # Происходит то же, что при столкновении с кораблем.
-            ship_hit(ai_settings, stats, screen, sb, ship, aliens, bullets)
+            ship_hit(ai_settings, stats, screen, sb, ship, shild, aliens,
+                     bullets)
             break
 
 
-def update_aliens(ai_settings, stats, screen, sb, ship, aliens, bullets,
+def update_aliens(ai_settings, stats, screen, sb, ship, shild, aliens, bullets,
                   explosions, s_explosion):
     """
     Проверяет, достиг ли флот края экрана,
@@ -343,11 +346,16 @@ def update_aliens(ai_settings, stats, screen, sb, ship, aliens, bullets,
             explosions.add(new_explosion)
             s_explosion.play()
 
-        # Обрабатывает столкновение корабля с пришельцем
-        ship_hit(ai_settings, stats, screen, sb, ship, aliens, bullets)
+        if shild.ship_shild <= 0:
+            # Обрабатывает столкновение корабля с пришельцем
+            ship_hit(ai_settings, stats, screen, sb, ship, shild, aliens,
+                     bullets)
+        else:
+            shild.shild_damaged()
 
     # проверяет пришельцев, добравшихся до нижнего края экрана
-    check_aliens_bottom(ai_settings, stats, screen, sb, ship, aliens, bullets)
+    check_aliens_bottom(ai_settings, stats, screen, sb, ship, shild, aliens,
+                        bullets)
 
 
 def update_stars(stars):
@@ -355,7 +363,8 @@ def update_stars(stars):
     stars.update()
 
 
-def update_bullets_aliens(screen, bullets_alien, ship, shild, explosions,
+def update_bullets_aliens(ai_settings, screen, stats, sb, aliens, bullets,
+                          bullets_alien, ship, shild, explosions,
                           s_explosion):
     """Обновляет позиции пуль и уничтожает старые пули."""
     # вызывает update() для каждой пули, включенной в группу bullets_alien
@@ -373,8 +382,13 @@ def update_bullets_aliens(screen, bullets_alien, ship, shild, explosions,
         # звук взрыва
         s_explosion.play()
 
-        # уменьшает энергию щита
-        shild.shild_reducted()
+        if shild.ship_shild > 0:
+            # уменьшает энергию щита
+            shild.shild_reducted()
+        else:
+            # Обрабатывает столкновение корабля с пришельцем
+            ship_hit(ai_settings, stats, screen, sb, ship, shild, aliens,
+                     bullets)
 
 
 def update_bullets(ai_settings, screen, stats, sb, ship, aliens, bullets,

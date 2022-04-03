@@ -10,7 +10,7 @@ class Shild:
         """инициализирует щит"""
         self.shild_width = ai_settings.shild_width
         self.shild_height = ai_settings.shild_height
-        self.color_red = ai_settings.color_red
+        self.color_back_shild = ai_settings.color_back_shild
         self.color_blue = ai_settings.color_blue
         self.shild_reduction = ai_settings.shild_reduction
         self.ship_shild = ai_settings.ship_shild
@@ -25,8 +25,7 @@ class Shild:
         # квадрат щита, по центру и спереди корабля
         self.rect = self.surf.get_rect()
         self.rect.centerx = self.ship_rect.centerx
-        self.rect.bottom = self.ship_rect.top
-
+        self.rect.bottom = self.ship_rect.top -10
 
     def draw_shild(self):
         """Вывод щита на экран."""
@@ -37,7 +36,7 @@ class Shild:
         height = self.rect.height
         startAngle = 0
         endAngle = math.pi
-        lineWidth = 5
+        lineWidth = 3
 
         # back part
         pygame.draw.arc(self.surf, self.color_blue, (x, y, width, height),
@@ -46,14 +45,14 @@ class Shild:
         # left part
         startAngle = math.pi / 2 + (math.pi / 2) * self.ship_shild
         endAngle = math.pi
-        pygame.draw.arc(self.surf, self.color_red, (x, y, width, height),
+        pygame.draw.arc(self.surf, self.color_back_shild, (x, y, width, height),
                         startAngle, endAngle,
                         lineWidth)
 
         # right part
         startAngle = 0
         endAngle = (math.pi / 2 - (math.pi / 2) * self.ship_shild)
-        pygame.draw.arc(self.surf, self.color_red, (x, y, width, height),
+        pygame.draw.arc(self.surf, self.color_back_shild, (x, y, width, height),
                         startAngle, endAngle, lineWidth)
 
         self.screen.blit(self.surf, self.rect)
@@ -61,8 +60,17 @@ class Shild:
     def update(self):
         """положение: перед кораблем"""
         self.rect.centerx = self.ship_rect.centerx
-        self.rect.top = self.ship_rect.top-10
+        self.rect.top = self.ship_rect.top - 10
 
     def shild_reducted(self):
         """показывает энергию щита"""
-        self.ship_shild -= self.shild_reduction
+        if self.ship_shild > 0:
+            self.ship_shild -= self.shild_reduction
+
+    def shild_damaged(self):
+        """разрушает щит"""
+        self.ship_shild = 0
+
+    def shild_recovery(self):
+        """разрушает щит"""
+        self.ship_shild = 1.0

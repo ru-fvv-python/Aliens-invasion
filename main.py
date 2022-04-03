@@ -87,14 +87,16 @@ def run():
                               explosions, s_explosion)
 
             # Обновляет позицию пришельцев
-            gf.update_aliens(ai_set, stats, sc, sb, ship, aliens, bullets,
+            gf.update_aliens(ai_set, stats, sc, sb, ship, shild, aliens,
+                             bullets,
                              explosions, s_explosion)
 
             # выстрел пришельца
             gf.create_bullet_alien(ai_set, sc, aliens, bullets_alien, s_laser)
             # Обновляет позиции пуль пришельцев
-            gf.update_bullets_aliens(sc, bullets_alien, ship, shild,
-                                     explosions, s_explosion)
+            gf.update_bullets_aliens(ai_set, sc, stats, sb, aliens, bullets,
+                                     bullets_alien, ship, shild, explosions,
+                                     s_explosion)
 
             # обновляет взрывы
             gf.update_explosions(explosions)

@@ -17,9 +17,9 @@ class Settings:
         self.ship_limit = 3  # ограничение количества кораблей
         # цвета для щита
         self.shild_width = 200
-        self.shild_height = 50
-        self.color_red = (255, 0, 0)
-        self.color_blue = (0, 0, 255)
+        self.shild_height = 100
+        self.color_back_shild = (255, 0, 0)
+        self.color_blue = (0, 212, 255)
         # уменьшение энергии щита за одно отражение снаряда
         self.shild_reduction = 0.1
 
