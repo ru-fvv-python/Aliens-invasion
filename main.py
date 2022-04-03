@@ -75,7 +75,7 @@ def run():
 
     while True:
         # отслеживание нажатия клавиш
-        gf.check_events(sb, ship, aliens, bullets, ai_set, sc, stats,
+        gf.check_events(sb, ship, shild, aliens, bullets, ai_set, sc, stats,
                         play_button, s_cannon)
 
         if stats.game_active:

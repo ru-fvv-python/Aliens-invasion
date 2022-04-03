@@ -37,7 +37,7 @@ def chec_record(stats) -> int:
             return high_score_old
 
 
-def check_events(sb, ship, aliens, bullets, ai_settings, screen, stats,
+def check_events(sb, ship, shild, aliens, bullets, ai_settings, screen, stats,
                  play_button, s_cannon):
     """Обрабатывает нажатия клавиш"""
     for event in pygame.event.get():
@@ -62,7 +62,7 @@ def check_events(sb, ship, aliens, bullets, ai_settings, screen, stats,
                 fire_bullet(ai_settings, screen, ship, bullets, s_cannon)
             elif event.key == pygame.K_p and not stats.game_active:
                 # запускает игру
-                start_game(ai_settings, screen, stats, ship, aliens, bullets)
+                start_game(ai_settings, screen, stats, ship, shild, aliens, bullets)
             elif event.key == pygame.K_q:
                 new_record = chec_record(stats)
                 save_record(new_record)
@@ -70,11 +70,10 @@ def check_events(sb, ship, aliens, bullets, ai_settings, screen, stats,
         elif event.type == pygame.MOUSEBUTTONDOWN:
             mouse_x, mouse_y = pygame.mouse.get_pos()
             check_play_button(ai_settings, screen, stats, sb, play_button,
-                              ship,
-                              aliens, bullets, mouse_x, mouse_y)
+                              ship, shild, aliens, bullets, mouse_x, mouse_y)
 
 
-def start_game(ai_settings, screen, stats, ship, aliens, bullets):
+def start_game(ai_settings, screen, stats, ship, shild, aliens, bullets):
     """запускает игру"""
     # указатель мыши скрывается
     pygame.mouse.set_visible(False)
@@ -93,12 +92,11 @@ def start_game(ai_settings, screen, stats, ship, aliens, bullets):
     # установка после рестарта игры начальной скорости корабля
     ship.speed_ship = ai_settings.speed
     ship.center_ship()  # его центровка
+    shild.shild_recovery()
 
 
-def check_play_button(ai_settings, screen, stats, sb, play_button, ship,
-                      aliens,
-                      bullets,
-                      mouse_x, mouse_y):
+def check_play_button(ai_settings, screen, stats, sb, play_button, ship, shild,
+                      aliens, bullets, mouse_x, mouse_y):
     """Запускает новую игру при нажатии кнопки Play"""
     button_clicked = play_button.rect.collidepoint(mouse_x, mouse_y)
 
@@ -118,7 +116,7 @@ def check_play_button(ai_settings, screen, stats, sb, play_button, ship,
         sb.prep_image()
 
         # запускает игру
-        start_game(ai_settings, screen, stats, ship, aliens, bullets)
+        start_game(ai_settings, screen, stats, ship, shild, aliens, bullets)
 
 
 def fire_bullet(ai_settings, screen, ship, bullets, s_cannon):
