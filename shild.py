@@ -25,7 +25,7 @@ class Shild:
         # квадрат щита, по центру и спереди корабля
         self.rect = self.surf.get_rect()
         self.rect.centerx = self.ship_rect.centerx
-        self.rect.bottom = self.ship_rect.top -10
+        self.rect.top = self.ship_rect.top - 30
 
     def draw_shild(self):
         """Вывод щита на экран."""
@@ -60,7 +60,7 @@ class Shild:
     def update(self):
         """положение: перед кораблем"""
         self.rect.centerx = self.ship_rect.centerx
-        self.rect.top = self.ship_rect.top - 10
+        self.rect.top = self.ship_rect.top - 30
 
     def shild_reducted(self):
         """показывает энергию щита"""

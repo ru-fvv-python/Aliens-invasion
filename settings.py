@@ -16,7 +16,7 @@ class Settings:
         # параметры карабля ----------------------------------------
         self.ship_limit = 3  # ограничение количества кораблей
         # цвета для щита
-        self.shild_width = 200
+        self.shild_width = 130
         self.shild_height = 100
         self.color_back_shild = (255, 0, 0)
         self.color_blue = (0, 212, 255)
@@ -30,13 +30,13 @@ class Settings:
         # параметры пули -------------------------------------------
         self.bullet_with = 3
         self.bullet_height = 25
-        self.bullet_color = (219, 138, 17)
+        self.bullet_color = (105, 213, 244)
         self.bullets_allowed = 3
 
         # параметры пули пришельцев -------------------------------------
         self.bullet_alien_with = 3
         self.bullet_alien_height = 25
-        self.bullet_alien_color = (105, 213, 244)
+        self.bullet_alien_color = (219, 138, 17)
         self.bullets_alien_allowed = 5
         self.last_shot = pygame.time.get_ticks()
 
@@ -66,7 +66,7 @@ class Settings:
         self.alien_speed_factor = 5
         self.bullet_speed_factor = 10
         self.bullet_alien_speed_factor = 10
-        self.speed = 5
+        self.speed = 10
         self.ship_shild = 1.0  # энергетический щит
         # fleet_direction = 1 обозначает движение вправо; а -1 - влево.
         self.fleet_direction = -1

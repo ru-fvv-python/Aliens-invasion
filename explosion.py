@@ -6,7 +6,7 @@ class Explosion(Sprite):
     """ класс для создания взрыва"""
 
     def __init__(self, file_sprites, columns, rows, screen, downed_aliens=None,
-                 rammed_alien=None, ship=None):
+                 rammed_alien=None, ship=None, shild=None):
         """описывает взрыв
             file_sprites - файл со спрайтами,
             columns - число колонок со спрайтами,
@@ -14,13 +14,15 @@ class Explosion(Sprite):
             screen - экран,
             downed_aliens - список сбитых пришельцев пулями
             rammed_alien - пришелец протараненный кораблем игрока
-            ship - подвитый корабль игрока пулей или протараненный пришельцем
+            ship - подбитый корабль игрока пулей или протараненный пришельцем
+            shild - блок шитом
         """
         super().__init__()
         self.screen = screen
         self.downed_aliens = downed_aliens
         self.rammed_alien = rammed_alien
         self.ship = ship
+        self.shild = shild
 
         # читаем файл со спрайтами
         image_sprites = pygame.image.load(
@@ -86,6 +88,13 @@ class Explosion(Sprite):
         if self.ship is not None:
             # присваиваем координаты корабля поверхности для взрыва
             self.rect.center = ship.rect.center
+            #  активируем флаг взрыва
+            self.flExp = True
+
+        # берем координаты щита корабля
+        if self.shild is not None:
+            # присваиваем координаты переда щита для взрыва
+            self.rect.center = shild.rect.center
             #  активируем флаг взрыва
             self.flExp = True
 

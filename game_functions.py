@@ -316,6 +316,14 @@ def check_aliens_bottom(ai_settings, stats, screen, sb, ship, shild, aliens,
             break
 
 
+def explosion_shild(screen, shild, explosions, s_explosion):
+    """Взрыв щита"""
+    new_explosion = Explosion('explosion_shild', 5, 8, screen,
+                              shild=shild)
+    explosions.add(new_explosion)
+    s_explosion.play()
+
+
 def update_aliens(ai_settings, stats, screen, sb, ship, shild, aliens, bullets,
                   explosions, s_explosion):
     """
@@ -332,24 +340,26 @@ def update_aliens(ai_settings, stats, screen, sb, ship, shild, aliens, bullets,
 
     # Проверка коллизий "пришелец-корабль".
     if collisions:
-        # создание взрыва корабля
-        new_explosion = Explosion('sprite-explosion', 8, 6, screen, ship=ship)
-        explosions.add(new_explosion)
-        s_explosion.play()
-
-        for rammed_alien in collisions:
-            # создание взрыва пришельца
+        if shild.ship_shild <= 0:  # если нет щита
+            # создание взрыва корабля
             new_explosion = Explosion('sprite-explosion', 8, 6, screen,
-                                      rammed_alien=rammed_alien)
+                                      ship=ship)
             explosions.add(new_explosion)
             s_explosion.play()
 
-        if shild.ship_shild <= 0:
+            for rammed_alien in collisions:
+                # создание взрыва пришельца
+                new_explosion = Explosion('sprite-explosion', 8, 6, screen,
+                                          rammed_alien=rammed_alien)
+                explosions.add(new_explosion)
+                s_explosion.play()
             # Обрабатывает столкновение корабля с пришельцем
             ship_hit(ai_settings, stats, screen, sb, ship, shild, aliens,
                      bullets)
-        else:
-            shild.shild_damaged()
+        elif shild.ship_shild > 0:  # если щит есть
+            # создание взрыв щита
+            explosion_shild(screen, shild, explosions, s_explosion)
+            shild.shild_damaged()  # уничтожение щита
 
     # проверяет пришельцев, добравшихся до нижнего края экрана
     check_aliens_bottom(ai_settings, stats, screen, sb, ship, shild, aliens,
@@ -368,23 +378,29 @@ def update_bullets_aliens(ai_settings, screen, stats, sb, aliens, bullets,
     # вызывает update() для каждой пули, включенной в группу bullets_alien
     bullets_alien.update()
 
-    """Обработка коллизий пуль с кораблем."""
-    # При обнаружении попадания удалить пулю .
-    collisions = pygame.sprite.spritecollide(ship, bullets_alien, True)
-    if collisions:
-        # создание взрыва
-        new_explosion = Explosion('sprite-explosion', 8, 6, screen,
-                                  ship=ship)
-        explosions.add(new_explosion)
+    # если энергия в щите есть, то
+    if shild.ship_shild > 0:
+        """Обработка коллизий пуль со щитом."""
+        # При обнаружении попадания удалить пулю .
+        collisions_shild = pygame.sprite.spritecollide(shild, bullets_alien, True)
+        if collisions_shild:
+            # создание взрыв щита
+            explosion_shild(screen, shild, explosions, s_explosion)
+            shild.shild_reducted()  # уменьшает энергию щита
 
-        # звук взрыва
-        s_explosion.play()
-
-        if shild.ship_shild > 0:
-            # уменьшает энергию щита
-            shild.shild_reducted()
-        else:
-            # Обрабатывает столкновение корабля с пришельцем
+    # если энергии в щите нет
+    elif shild.ship_shild <= 0:
+        """Обработка коллизий пуль с кораблем."""
+        # При обнаружении попадания удалить пулю .
+        collisions_ship = pygame.sprite.spritecollide(ship, bullets_alien, True)
+        if collisions_ship:
+            # создание взрыва
+            new_explosion = Explosion('sprite-explosion', 8, 6, screen,
+                                      ship=ship)
+            explosions.add(new_explosion)
+            # звук взрыва
+            s_explosion.play()
+            # Обрабатывает нанесение урона кораблю
             ship_hit(ai_settings, stats, screen, sb, ship, shild, aliens,
                      bullets)
 
@@ -476,6 +492,9 @@ def update_screen(ai_settings, screen, stats, sb, ship, flame_r, flame_l,
     for bullet in bullets_alien.sprites():
         bullet.draw_bullet()
 
+    # рисуем щит корабля
+    shild.draw_shild()
+
     # рисуем корабль
     screen.blit(ship.image, ship.rect)
 
@@ -486,8 +505,7 @@ def update_screen(ai_settings, screen, stats, sb, ship, flame_r, flame_l,
     screen.blit(flame_r.image, flame_r.rect)
     screen.blit(flame_l.image, flame_l.rect)
 
-    # рисуем щит корабля
-    shild.draw_shild()
+
 
     # вывод пришельцев
     aliens.draw(screen)
