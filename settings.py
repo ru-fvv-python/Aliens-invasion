@@ -16,9 +16,9 @@ class Settings:
         # параметры карабля ----------------------------------------
         self.ship_limit = 3  # ограничение количества кораблей
         # цвета для щита
-        self.shild_width = 130
-        self.shild_height = 100
-        self.color_back_shild = (255, 0, 0)
+        self.shild_width = 150
+        self.shild_height = 80
+        self.color_back_shild = (5, 5, 25)
         self.color_blue = (0, 212, 255)
         # уменьшение энергии щита за одно отражение снаряда
         self.shild_reduction = 0.1
@@ -37,7 +37,7 @@ class Settings:
         self.bullet_alien_with = 3
         self.bullet_alien_height = 25
         self.bullet_alien_color = (219, 138, 17)
-        self.bullets_alien_allowed = 5
+        self.bullets_alien_allowed = 3
         self.last_shot = pygame.time.get_ticks()
 
         # настройки пришельцев -----------------------------------------

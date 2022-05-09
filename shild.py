@@ -36,7 +36,7 @@ class Shild:
         height = self.rect.height
         startAngle = 0
         endAngle = math.pi
-        lineWidth = 3
+        lineWidth = 1
 
         # back part
         pygame.draw.arc(self.surf, self.color_blue, (x, y, width, height),
@@ -60,7 +60,7 @@ class Shild:
     def update(self):
         """положение: перед кораблем"""
         self.rect.centerx = self.ship_rect.centerx
-        self.rect.top = self.ship_rect.top - 30
+        self.rect.top = self.ship_rect.top - 65
 
     def shild_reducted(self):
         """показывает энергию щита"""

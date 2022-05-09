@@ -9,6 +9,7 @@ from scoreboard import Scoreboard
 from settings import Settings
 from shild import Shild
 from ship import Ship
+from sphere import Sphere
 
 
 def run():
@@ -53,6 +54,8 @@ def run():
     flame_l = JetFlame(ship, -ai_set.offset_jet, ai_set.zoom)
     # щит
     shild = Shild(ai_set, sc, ship)
+    # сфера щита
+    sphere = Sphere(sc, ship)
 
     # создание группы звезд
     stars = Group()
@@ -92,7 +95,8 @@ def run():
                              explosions, s_explosion)
 
             # выстрел пришельца
-            gf.create_bullet_alien(ai_set, sc, aliens, bullets_alien, s_laser)
+            gf.create_bullet_alien(ai_set, sc, aliens, bullets_alien, s_laser,
+                                   ship)
             # Обновляет позиции пуль пришельцев
             gf.update_bullets_aliens(ai_set, sc, stats, sb, aliens, bullets,
                                      bullets_alien, ship, shild, explosions,
@@ -103,8 +107,8 @@ def run():
 
         # Обновляет изображения на экране и отображает новый экран.
         gf.update_screen(ai_set, sc, stats, sb, ship, flame_r, flame_l, shild,
-                         bullets, bullets_alien, aliens, stars, explosions,
-                         play_button)
+                         sphere, bullets, bullets_alien, aliens, stars,
+                         explosions, play_button)
 
 
 run()

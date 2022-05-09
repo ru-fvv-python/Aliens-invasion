@@ -26,7 +26,7 @@ class Star(Sprite):
         self.sf = images[randint(0, 4)]
 
         # уменьшение картики нв случайную величину от 1 до 5
-        self.zoom = randint(4, 6)
+        self.zoom = randint(3, 6)
 
         # готовая картинка
         self.image = pygame.transform.scale(self.sf,
@@ -35,9 +35,12 @@ class Star(Sprite):
                                             )
         # скорость и затемнение звезд
         if self.zoom == 6:
-            self.star_speed = 1
+            self.star_speed = 0
             self.image.set_alpha(100)
         elif self.zoom == 5:
+            self.star_speed = 1
+            self.image.set_alpha(150)
+        elif self.zoom == 4:
             self.star_speed = 2
             self.image.set_alpha(200)
         else:

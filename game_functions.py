@@ -62,7 +62,8 @@ def check_events(sb, ship, shild, aliens, bullets, ai_settings, screen, stats,
                 fire_bullet(ai_settings, screen, ship, bullets, s_cannon)
             elif event.key == pygame.K_p and not stats.game_active:
                 # запускает игру
-                start_game(ai_settings, screen, stats, ship, shild, aliens, bullets)
+                start_game(ai_settings, screen, stats, ship, shild, aliens,
+                           bullets)
             elif event.key == pygame.K_q:
                 new_record = chec_record(stats)
                 save_record(new_record)
@@ -168,12 +169,13 @@ def create_alien(ai_settings, screen, aliens, alien_number, row_number):
     aliens.add(alien)
 
 
-def create_bullet_alien(ai_settings, screen, aliens, bullets_alien, s_laser):
+def create_bullet_alien(ai_settings, screen, aliens, bullets_alien, s_laser,
+                        ship):
     """Создает пулю пришельца"""
 
     cooldown_list = []
 
-    for cooldown in range(2000, 5000, 500):
+    for cooldown in range(5000, 100, -100):
         cooldown_list.append(cooldown)
     cooldown = random.choice(cooldown_list)
 
@@ -382,7 +384,8 @@ def update_bullets_aliens(ai_settings, screen, stats, sb, aliens, bullets,
     if shild.ship_shild > 0:
         """Обработка коллизий пуль со щитом."""
         # При обнаружении попадания удалить пулю .
-        collisions_shild = pygame.sprite.spritecollide(shild, bullets_alien, True)
+        collisions_shild = pygame.sprite.spritecollide(shild, bullets_alien,
+                                                       True)
         if collisions_shild:
             # создание взрыв щита
             explosion_shild(screen, shild, explosions, s_explosion)
@@ -392,7 +395,8 @@ def update_bullets_aliens(ai_settings, screen, stats, sb, aliens, bullets,
     elif shild.ship_shild <= 0:
         """Обработка коллизий пуль с кораблем."""
         # При обнаружении попадания удалить пулю .
-        collisions_ship = pygame.sprite.spritecollide(ship, bullets_alien, True)
+        collisions_ship = pygame.sprite.spritecollide(ship, bullets_alien,
+                                                      True)
         if collisions_ship:
             # создание взрыва
             new_explosion = Explosion('sprite-explosion', 8, 6, screen,
@@ -475,8 +479,8 @@ def update_explosions(explosions):
 
 
 def update_screen(ai_settings, screen, stats, sb, ship, flame_r, flame_l,
-                  shild, bullets, bullets_alien, aliens, stars, explosion,
-                  play_button):
+                  shild, sphere, bullets, bullets_alien, aliens, stars,
+                  explosion, play_button):
     """Обновляет изображения на экране и отображает новый экран."""
     # рисуем фон экрана
     screen.fill(ai_settings.bg_color)
@@ -498,14 +502,14 @@ def update_screen(ai_settings, screen, stats, sb, ship, flame_r, flame_l,
     # рисуем корабль
     screen.blit(ship.image, ship.rect)
 
+    screen.blit(sphere.image, sphere.rect)
+
     # анимация взрыва
     explosion.update()
 
     # рисуем огни двигателя
     screen.blit(flame_r.image, flame_r.rect)
     screen.blit(flame_l.image, flame_l.rect)
-
-
 
     # вывод пришельцев
     aliens.draw(screen)
@@ -526,3 +530,4 @@ def update_screen(ai_settings, screen, stats, sb, ship, flame_r, flame_l,
     flame_r.update()
     flame_l.update()
     shild.update()
+    sphere.update()
